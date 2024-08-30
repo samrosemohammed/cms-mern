@@ -3,6 +3,7 @@ import { Button } from "../../components/Button";
 import { X, Upload, Link2 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import { FeedBack } from "../FeedBack";
 
 export const AnnouncementForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +13,7 @@ export const AnnouncementForm = () => {
   const [newLink, setNewLink] = useState("");
   const [description, setDescription] = useState("");
   const [announcements, setAnnouncements] = useState<any>([]);
+  const [serverMessage, setServerMessage] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -101,6 +103,7 @@ export const AnnouncementForm = () => {
   };
 
   const handleCreateAnnouncement = async () => {
+    setServerMessage("");
     console.log("Create Announcement Clicked");
     const selectedModuleId = localStorage.getItem("selectedModuleId");
     const assignGroup = localStorage.getItem("assignGroup");
@@ -136,8 +139,10 @@ export const AnnouncementForm = () => {
           }
         );
         console.log("Edit Announcement Response:", response.data);
+        setServerMessage(response.data.message);
         navigate("/teacher-dashboard/module/announcement");
       } catch (err: any) {
+        setServerMessage(err.response.data.message);
         console.error("Error editing announcement:", err.response.data.message);
       }
     } else {
@@ -150,18 +155,21 @@ export const AnnouncementForm = () => {
           }
         );
         console.log("Create Announcement Response:", response.data);
+
         navigate("/teacher-dashboard/module/announcement");
       } catch (err: any) {
         console.error(
           "Error creating announcement:",
           err.response.data.message
         );
+        setServerMessage(err.response.data.message);
       }
     }
   };
 
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4 items-center">

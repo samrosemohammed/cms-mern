@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { FeedBack } from "../FeedBack";
 
 export const AssignmentForm = () => {
   const [title, setTitle] = useState<string>("");
@@ -14,6 +15,7 @@ export const AssignmentForm = () => {
   const [time, setTime] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLinkFormOpen, setIsLinkFormOpen] = useState(false);
+  const [serverMessage, setServerMessage] = useState("");
   const [newLink, setNewLink] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,10 +35,11 @@ export const AssignmentForm = () => {
           console.log("Assignment:", response.data);
           const { title, description, DueDate, DueDateTime, links, files } =
             response.data.assignments[0];
-          setTitle(title || "");
-          setDescription(description || "");
-          setDate(DueDate || "");
+          setTitle(title);
+          setDescription(description);
+          setDate(DueDate);
           // Parse the time to a 24-hour format
+
           const formattedTime = moment(DueDateTime, [
             "hh:mm A",
             "HH:mm",
@@ -66,6 +69,7 @@ export const AssignmentForm = () => {
   };
 
   const handleCreateAssignment = async () => {
+    setServerMessage("");
     const selectedModuleId = localStorage.getItem("selectedModuleId");
     const assignGroup = localStorage.getItem("assignGroup");
     const data: any = localStorage.getItem("modulesData");
@@ -111,6 +115,7 @@ export const AssignmentForm = () => {
             }
           );
           console.log("Response:", response.data);
+          localStorage.setItem("msg", response.data.message);
           navigate("/teacher-dashboard/module/assignment");
         } catch (err: any) {
           console.error("Error updating assignment:", err);
@@ -127,10 +132,12 @@ export const AssignmentForm = () => {
           }
         );
         console.log("Response:", response.data);
+        localStorage.setItem("msg", response.data.message);
         navigate("/teacher-dashboard/module/assignment");
       }
     } catch (err: any) {
       console.error("Error creating assignment:", err);
+      setServerMessage(err.response.data.message);
     }
   };
 
@@ -188,6 +195,7 @@ export const AssignmentForm = () => {
 
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4 items-center">
@@ -224,6 +232,7 @@ export const AssignmentForm = () => {
               Description
             </label>
             <textarea
+              placeholder="Optional"
               id="module-file-description"
               name="module-file-description"
               className="w-full bg-transparent border border-slate-700 p-4 h-[10vw] resize-none outline-none"

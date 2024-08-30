@@ -61,7 +61,7 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
       const res = await axios.get(
         "http://localhost:5000/api/auth/user-details",
         {
-          headers: { "x-auth-token": localStorage.getItem("token") },
+          withCredentials: true,
         }
       );
       console.log("User deatils fetched ", res.data);

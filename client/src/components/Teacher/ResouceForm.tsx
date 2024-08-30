@@ -3,6 +3,7 @@ import { Button } from "../Button";
 import { Upload, Link2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { FeedBack } from "../FeedBack";
 
 interface ResourceFormProps {
   data?: any;
@@ -17,7 +18,9 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const navigate = useNavigate();
+  const [serverMessage, setServerMessage] = useState("");
   const { id } = useParams();
+
   // console.log("Resource id ", id);
 
   useEffect(() => {
@@ -102,7 +105,19 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
     navigate("/teacher-dashboard/module/file");
   };
 
-  const handleLinkSubmit = () => {
+  const handleLinkSubmit = (e: any) => {
+    e.preventDefault();
+    setServerMessage("");
+
+    // Basic URL validation regex pattern
+    const urlPattern =
+      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+
+    if (!urlPattern.test(newLink)) {
+      setServerMessage("Invalid URL");
+      return; // Prevent form submission if the URL is invalid
+    }
+
     if (newLink.trim()) {
       setLinks((prevLinks) => [...prevLinks, newLink]);
       setNewLink("");
@@ -110,7 +125,9 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
     }
   };
 
-  const handlePostUpload = async () => {
+  const handlePostUpload = async (e: any) => {
+    e.preventDefault();
+    setServerMessage("");
     const selectedModuleId = localStorage.getItem("selectedModuleId");
     const assignGroup = localStorage.getItem("assignGroup");
     const data: any = localStorage.getItem("modulesData");
@@ -153,6 +170,7 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
           }
         );
         console.log("Response:", response.data);
+        localStorage.setItem("msg", response.data.message);
       } else {
         const response = await axios.post(
           "http://localhost:5000/api/teacher-dashboard/module/file/upload",
@@ -165,20 +183,25 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
           }
         );
         console.log("Response:", response.data);
+        // console.log(response.data.message);
+        localStorage.setItem("msg", response.data.message);
       }
 
       navigate("/teacher-dashboard/module/file"); // Redirect after successful upload
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error posting resource data:", err);
+      setServerMessage(err.response.data.message);
     }
   };
 
+  console.log("Message from the server: ", serverMessage);
   const handleRemoveLink = (index: number) => {
     setLinks((prevLinks) => prevLinks.filter((_, i) => i !== index));
   };
 
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4 items-center">
@@ -215,6 +238,7 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
               name="module-file-description"
               className="w-full bg-transparent border border-slate-700 p-4 h-[10vw] resize-none outline-none"
               value={description}
+              placeholder="Optional"
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>

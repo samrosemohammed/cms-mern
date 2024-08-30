@@ -25,7 +25,13 @@ const loginUser = async (req, res) => {
       };
 
       const token = jwt.sign(payload, "I'm_Batman", { expiresIn: "1h" });
-      res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      res.cookie("token", token, {
+        maxAge: 3600000,
+        httpOnly: true,
+        sameSite: "None",
+        secure: process.env.NODE_ENV === "production",
+      });
+
       return res.json({
         success: true,
         message: "Login successful",
@@ -83,7 +89,12 @@ const loginUser = async (req, res) => {
       };
 
       const token = jwt.sign(payload, "I'm_Batman", { expiresIn: "1h" });
-      res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      res.cookie("token", token, {
+        maxAge: 3600000,
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: process.env.NODE_ENV === "production",
+      });
       return res.json({
         success: true,
         message: "Login successful",

@@ -12,8 +12,19 @@ export const createModuleResource = async (req, res) => {
     const { title, description, links, assignGroup, moduleId, teacherId } =
       req.body;
 
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
     // console.log("Received data:", req.body);
     const files = req.files.map((file) => file.path);
+    // Check if both files and links are empty
+    if (files.length === 0 && (!links || links.length === 0)) {
+      return res
+        .status(400)
+        .json({ message: "Please provide at least one file or link." });
+    }
+
     const newResource = new ModuleResource({
       title,
       description,
@@ -30,7 +41,7 @@ export const createModuleResource = async (req, res) => {
     res.status(201).json({
       success: true,
       newResource,
-      message: "Resource created successfully",
+      message: "Resource created",
     });
   } catch (error) {
     console.log("Error creating module resource:", error.message);
@@ -83,6 +94,7 @@ export const getModuleResources = async (req, res) => {
 export const downloadResourceFile = (req, res) => {
   try {
     const { filename } = req.params;
+    console.log("Received file name to download:", filename);
     // console.log("Received file name to download:", filename);
     const filePath = path.join(__dirname, `../uploads/${filename}`);
     res.download(filePath, (err) => {
@@ -151,7 +163,7 @@ export const editModuleResource = async (req, res) => {
     res.status(200).json({
       success: true,
       updatedResource,
-      message: "Resource updated successfully",
+      message: "Resource updated",
     });
   } catch (error) {
     console.log("Error updating module resource:", error.message);
@@ -184,9 +196,7 @@ export const deleteModuleResource = async (req, res) => {
       });
     });
 
-    res
-      .status(200)
-      .json({ resource, message: "Resource deleted successfully" });
+    res.status(200).json({ resource, message: "Resource deleted" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server Error" });

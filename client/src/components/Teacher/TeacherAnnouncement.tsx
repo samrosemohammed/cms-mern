@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Bookmark, EllipsisVertical, Minus } from "lucide-react";
 import axios from "axios";
+import moment from "moment";
 export const TeacherAnnouncement = () => {
   const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState<any>([]);
@@ -67,7 +68,7 @@ export const TeacherAnnouncement = () => {
     console.log("File Downloaded", fileName);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/teacher-dashboard/module/announcement/${fileName}`,
+        `http://localhost:5000/api/teacher-dashboard/module/announcement/download/${fileName}`,
         {
           withCredentials: true,
           responseType: "blob", // Ensure the response is treated as a file
@@ -86,6 +87,7 @@ export const TeacherAnnouncement = () => {
     }
   };
 
+  const currentYear = new Date().getFullYear();
   return (
     <>
       <section>
@@ -113,7 +115,14 @@ export const TeacherAnnouncement = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 relative">
-                  <p>{new Date(announcement.createdAt).toLocaleTimeString()}</p>
+                  <p className="text-slate-400 text-[14px]">
+                    Posted
+                    <span className="ml-2">
+                      {moment(announcement.createdAt).year() === currentYear
+                        ? moment(announcement.createdAt).format("MMM D")
+                        : moment(announcement.createdAt).format("YYYY MMM D")}
+                    </span>
+                  </p>
                   <EllipsisVertical
                     onClick={() => handleOption(announcement._id)}
                     className="cursor-pointer hover:bg-slate-800 rounded-full"

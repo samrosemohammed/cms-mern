@@ -26,7 +26,7 @@ export const FeedBack = ({ message }: FeedBackProps) => {
     <>
       {isVisible && (
         <section
-          className={`fixed bottom-4 right-4 bg-slate-800 border border-green-800 p-4 rounded shadow-lg z-[999] transition-transform duration-500 ${
+          className={`fixed bottom-4 right-4 bg-slate-800 border border-green-800 p-4 rounded  z-[999] transition-transform duration-500 ${
             isVisible ? "translate-x-[0%]" : "translate-x-[150%]"
           }`}
         >

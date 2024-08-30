@@ -5,12 +5,14 @@ import Teacher from "../models/Teacher.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
+  console.log("Token from Auth Middleware = ", token);
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized - Token expire" });
   }
 
   try {
     const decoded = jwt.verify(token, "I'm_Batman");
+    console.log("Auth Middleware Decoded = ", decoded);
     req.user = {
       _id: decoded.user._id,
       email: decoded.user.email,

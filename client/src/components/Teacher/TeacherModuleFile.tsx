@@ -3,10 +3,13 @@ import { Link2, Folder, Bookmark, EllipsisVertical, Album } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FeedBack } from "../FeedBack";
+import moment from "moment";
 
 export const TeacherModuleFile = () => {
   const [resources, setResources] = useState<any>([]);
   const [selectedResourceId, setSelectedResourceId] = useState(null);
+  const [serverMessage, setServerMessage] = useState("");
   const navigate = useNavigate();
 
   const handleEditResource = (resourceObjectId: any) => {
@@ -16,6 +19,7 @@ export const TeacherModuleFile = () => {
   };
 
   const handleDeleteResource = async (resourceObjectId: any) => {
+    setServerMessage("");
     console.log("Delete Clicked");
     console.log("Resource Object ID:", resourceObjectId);
     try {
@@ -26,6 +30,7 @@ export const TeacherModuleFile = () => {
         }
       );
       console.log("Response:", response.data.message);
+      setServerMessage(response.data.message);
       fetchModuleResources();
       navigate("/teacher-dashboard/module/file");
     } catch (err: any) {
@@ -45,9 +50,10 @@ export const TeacherModuleFile = () => {
 
   const handleFileDownload = async (fileName: string) => {
     console.log("File Downloaded");
+    console.log("File Name:", fileName);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/teacher-dashboard/module/file/${fileName}`,
+        `http://localhost:5000/api/teacher-dashboard/module/file/download/${fileName}`,
         {
           withCredentials: true,
           responseType: "blob", // Ensure the response is treated as a file
@@ -84,12 +90,19 @@ export const TeacherModuleFile = () => {
     }
   };
   useEffect(() => {
+    const msgFromLocalStorage = localStorage.getItem("msg");
+    if (msgFromLocalStorage) {
+      setServerMessage(msgFromLocalStorage);
+      localStorage.removeItem("msg"); // Remove the message after displaying it
+    }
     fetchModuleResources();
   }, []);
 
   console.log("Resources:", resources);
+  const currentYear = new Date().getFullYear();
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-8">
           <h1 className="tracking-wider text-[18px] text-slate-300 border-b inline-block border-green-400 capitalize">
@@ -110,7 +123,14 @@ export const TeacherModuleFile = () => {
                     <p className="dynamic-week-header">{resource.title}</p>
                   </div>
                   <div className="flex items-center gap-2 relative">
-                    <p>{new Date(resource.createdAt).toLocaleTimeString()}</p>
+                    <p className="text-slate-400 text-[14px]">
+                      Posted
+                      <span className="ml-2">
+                        {moment(resource.createdAt).year() === currentYear
+                          ? moment(resource.createdAt).format("MMM D")
+                          : moment(resource.createdAt).format("YYYY MMM D")}
+                      </span>
+                    </p>
                     <EllipsisVertical
                       onClick={() => handleOption(resource._id)}
                       className="cursor-pointer hover:bg-slate-800 rounded-full"
@@ -140,19 +160,27 @@ export const TeacherModuleFile = () => {
                     {resource.description}
                   </p>
                   <div className="file-container grid grid-cols-4 gap-4">
-                    {resource.files?.map((file: string, index: number) => (
-                      <p
-                        key={index}
-                        title={
-                          file ? file.split("-").pop() : "No file available"
-                        }
-                        onClick={() => handleFileDownload(file)}
-                        className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
-                      >
-                        {file.split("-").pop()}
-                      </p>
-                    ))}
+                    {resource.files?.map((file: string, index: number) => {
+                      // Extract the filename with the extension
+                      const fullName = file.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+                      const originalName = fullName.split("-")[0]; // Get the part before the timestamp
+                      const extension = fullName.split(".").pop(); // Get the file extension
 
+                      return (
+                        <p
+                          key={index}
+                          title={
+                            originalName
+                              ? `${originalName}.${extension}`
+                              : "No file available"
+                          }
+                          onClick={() => handleFileDownload(file)}
+                          className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                        >
+                          {`${originalName}.${extension}`}
+                        </p>
+                      );
+                    })}
                     {resource.links?.map((link: string, index: number) => (
                       <a
                         key={index}

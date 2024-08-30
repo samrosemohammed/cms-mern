@@ -4,6 +4,10 @@ import fs from "fs";
 export const createModuleAnnouncement = async (req, res) => {
   try {
     const { description, links, assignGroup, moduleId, teacherId } = req.body;
+    if (!description) {
+      return res.status(400).json({ message: "Description is required" });
+    }
+
     console.log("Received data:", req.body);
     const files = req.files.map((file) => file.path);
     if (!description || !moduleId || !teacherId) {
@@ -62,8 +66,11 @@ export const editModuleAnnouncement = async (req, res) => {
   try {
     const { id } = req.params;
     const { description, links, filesToRemove = [] } = req.body;
-
     console.log("Received data for edit:", req.body);
+
+    if (!description) {
+      return res.status(400).json({ message: "Description is required" });
+    }
 
     // Fetch the existing resource
     const existingAnnouncement = await ModuleAnnouncement.findById(id);

@@ -26,7 +26,7 @@ router.get(
 );
 
 router.get(
-  "/teacher-dashboard/module/file/uploads/:filename",
+  "/teacher-dashboard/module/file/download/uploads/:filename",
   authMiddleware,
   downloadResourceFile
 );
@@ -45,7 +45,7 @@ router.put(
 );
 
 router.delete(
-  "/teacher-dashboard/module/file/edit/:id",
+  "/teacher-dashboard/module/file/:id",
   authMiddleware,
   deleteModuleResource
 );

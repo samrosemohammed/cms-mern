@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 interface ButtonProps {
   type: string;
-  onClick?: () => void;
+  onClick?: (e?: any) => void;
 }
 
 export const Button = ({ type, onClick }: ButtonProps) => {

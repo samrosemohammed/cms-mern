@@ -33,7 +33,7 @@ router.get(
 );
 
 router.get(
-  "/teacher-dashboard/module/assignment/uploads/:filename",
+  "/teacher-dashboard/module/assignment/download/uploads/:filename",
   authMiddleware,
   downloadResourceFile
 );

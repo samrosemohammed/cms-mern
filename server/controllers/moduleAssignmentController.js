@@ -14,12 +14,24 @@ export const createModuleAssignment = async (req, res) => {
       teacherId,
     } = req.body;
 
-    console.log("Received data:", req.body);
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
+    if (!dueDate) {
+      return res.status(400).json({ message: "Due Date is Required" });
+    }
+
+    if (!dueDateTime) {
+      return res.status(400).json({ message: "Due Date Time is required" });
+    }
+
+    console.log("assign data:", req.body);
     const files = req.files.map((file) => file.path);
 
-    if (!title || !moduleId || !teacherId) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    // if (!title || !moduleId || !teacherId) {
+    //   return res.status(400).json({ message: "All fields are required" });
+    // }
 
     const newModuleAssignment = new ModuleAssignment({
       title,
@@ -39,7 +51,7 @@ export const createModuleAssignment = async (req, res) => {
     res.status(201).json({
       success: true,
       savedModuleAssignment,
-      message: "Module Assignment created successfully",
+      message: "Assignment created",
     });
   } catch (error) {
     console.log("Error creating module assignment:", error.message);
@@ -147,7 +159,7 @@ export const editModuleAssignment = async (req, res) => {
     res.status(200).json({
       success: true,
       updatedAssignment,
-      message: "Resource updated successfully",
+      message: "Assignment updated",
     });
   } catch (error) {
     console.log("Error updating module resource:", error.message);
@@ -164,7 +176,7 @@ export const deleteAssignment = async (req, res) => {
   console.log("ID", id);
   const assignment = await ModuleAssignment.findByIdAndDelete(id);
   if (!assignment) {
-    return res.status(400).json({ message: "Resource not found" });
+    return res.status(400).json({ message: "Assignment not found" });
   }
 
   const files = assignment.files;
@@ -180,7 +192,7 @@ export const deleteAssignment = async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: "Resource deleted successfully",
+    message: "Assignment deleted",
   });
 };
 

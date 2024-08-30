@@ -3,6 +3,7 @@ import { Button } from "../Button";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { FeedBack } from "../FeedBack";
 export const SubmitAssignmentForm = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [submittedAssignment, setSubmittedAssignment] = useState<any>([]);
@@ -12,6 +13,7 @@ export const SubmitAssignmentForm = () => {
   const [newLink, setNewLink] = useState("");
   const navigate = useNavigate();
   const { assignmentObjectId } = useParams();
+  const [serverMessage, setServerMessage] = useState("");
   const id = null;
   console.log("Assignment ID:", assignmentObjectId);
 
@@ -102,6 +104,7 @@ export const SubmitAssignmentForm = () => {
   };
 
   const handleSubmitAssignment = async () => {
+    setServerMessage("");
     console.log("Submit Assignment Clicked");
     const selectedModuleId = localStorage.getItem("selectedModuleId");
     const assignGroup = localStorage.getItem("assignGroup");
@@ -159,11 +162,13 @@ export const SubmitAssignmentForm = () => {
       }
     } catch (err: any) {
       console.error("Error creating assignment:", err);
+      setServerMessage(err.response.data.message);
     }
   };
 
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4 items-center">

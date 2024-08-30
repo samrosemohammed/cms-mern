@@ -34,7 +34,7 @@ export const createSubmitAssignment = async (req, res) => {
     if (files.length === 0 && (!links || links.length === 0)) {
       return res.status(400).json({
         success: false,
-        message: "You haven't attached any files or provided any links.",
+        message: "You haven't attached any files or provided any links",
       });
     }
 
@@ -153,6 +153,7 @@ export const deleteSubmitAssignment = async (req, res) => {
   try {
     const { id } = req.params;
     console.log("Received ID of Assignment:", id);
+    const assignment = await ModuleAssignment.findById(id);
     const deletedSubmitAssignment = await SubmitAssignment.findOneAndDelete({
       assignmentId: id,
     });
@@ -179,7 +180,7 @@ export const deleteSubmitAssignment = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      message: "Submit Assignment deleted successfully",
+      message: `Unsubmiited assignment on ${assignment.title}`,
     });
   } catch (err) {
     console.log("Error deleting submit assignment:", err.message);

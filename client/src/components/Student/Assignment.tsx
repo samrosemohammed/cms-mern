@@ -3,12 +3,14 @@ import { NotepadText } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { FeedBack } from "../FeedBack";
 
 export const Assignment = () => {
   const [assignments, setAssignments] = useState<any>([]);
   const [submittedAssignment, setSubmittedAssignment] = useState<any>([]);
   const navigate = useNavigate();
   const moduleId = localStorage.getItem("selectedModuleId");
+  const [serverMessage, setServerMessage] = useState("");
 
   const fetchSubmittedAssignment = async () => {
     try {
@@ -72,6 +74,7 @@ export const Assignment = () => {
   };
 
   const handleUnsubmit = async (assignmentObjectId: string) => {
+    setServerMessage("");
     console.log("Unsubmitting assignment:", assignmentObjectId);
     // Handle unsubmission logic here
     try {
@@ -82,6 +85,8 @@ export const Assignment = () => {
         }
       );
       console.log("Unsubmitted assignment:", response.data);
+      setServerMessage(response.data.message);
+      fetchSubmittedAssignment();
     } catch (err: any) {
       console.error("Error unsubmitting assignment:", err);
     }
@@ -102,6 +107,7 @@ export const Assignment = () => {
 
   return (
     <>
+      {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="assignment-container">
           <ol className="space-y-8">

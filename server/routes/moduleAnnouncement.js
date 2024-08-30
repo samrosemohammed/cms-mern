@@ -52,7 +52,7 @@ router.delete(
 );
 
 router.get(
-  "/teacher-dashboard/module/announcement/uploads/:filename",
+  "/teacher-dashboard/module/announcement/download/uploads/:filename",
   authMiddleware,
   downloadResourceFile
 );

@@ -11,6 +11,7 @@ const moduleResourceSchema = new mongoose.Schema({
   files: {
     type: Array,
   },
+
   links: {
     type: Array,
   },

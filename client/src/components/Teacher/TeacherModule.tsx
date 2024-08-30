@@ -2,10 +2,12 @@ import moduleBanner from "../../assets/module-banner.jpg"; // Adjust the path as
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const TeacherModule = () => {
   const [modules, setModules] = useState<any>([]);
   const navigate = useNavigate();
+  console.log("token : ", Cookies.get("token"));
 
   const handleModuleClick = (id: string, assignGroup: string) => {
     console.log("Module click: ", id);
