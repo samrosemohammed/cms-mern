@@ -52,11 +52,20 @@ export const TeacherAssignment = () => {
           responseType: "blob", // Ensure the response is treated as a file
         }
       );
-      // console.log("Response:", response.data.message);
+      // Extract the original file name (before the last '-')
+      const fullName = fileName.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+      const lastHyphenIndex = fullName.lastIndexOf("-"); // Find the last hyphen in the file name
+      const originalName = fullName.slice(0, lastHyphenIndex); // Get the name before the last hyphen
+      const extension = fullName.split(".").pop(); // Get the file extension
+
+      // Create a download URL for the file
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", fileName);
+
+      // Set the correct name for the downloaded file
+      link.setAttribute("download", `${originalName}.${extension}`);
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

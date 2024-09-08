@@ -5,6 +5,9 @@ import {
   editTeacher,
   deleteTeacher,
   getSubmitWork,
+  updateChangeEmail,
+  updatePasswordChange,
+  updateTeacherProfile,
 } from "../controllers/teacherController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -28,5 +31,24 @@ router.get(
   "/teacher-dashboard/module/submit-work/:id/:group",
   authMiddleware,
   getSubmitWork
+);
+
+router.put(
+  "/teacher-dashboard/settings/change-email/:id",
+  authMiddleware,
+  updateChangeEmail
+);
+
+router.put(
+  "/teacher-dashboard/settings/change-password/:id",
+  authMiddleware,
+  updatePasswordChange
+);
+
+router.put(
+  "/teacher-dashboard/settings/profile/:id",
+  authMiddleware,
+  upload.single("teacherImage"),
+  updateTeacherProfile
 );
 export default router;

@@ -9,7 +9,7 @@ export const StudentSideBar = () => {
     if (location.pathname.startsWith("/student-dashboard/module")) {
       setNavItems(["Back", "File", "Assignment", "Announcement"]);
     } else {
-      setNavItems(["Dashboard"]);
+      setNavItems(["Dashboard", "Log Out"]);
     }
   }, [location.pathname]);
   return (

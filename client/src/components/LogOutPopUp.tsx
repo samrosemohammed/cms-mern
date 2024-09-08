@@ -1,10 +1,17 @@
 import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 export const LogOutPopUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const handleCancel = () => {
-    navigate("/admin-dashboard");
+    if (location.pathname.includes("admin-dashboard")) {
+      navigate("/admin-dashboard");
+    } else if (location.pathname.includes("teacher-dashboard")) {
+      navigate("/teacher-dashboard");
+    } else if (location.pathname.includes("student-dashboard")) {
+      navigate("/student-dashboard");
+    }
   };
 
   const handleLogout = async () => {

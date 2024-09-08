@@ -35,11 +35,18 @@ export const File = () => {
           responseType: "blob", // Ensure the response is treated as a file
         }
       );
-      // console.log("Response:", response.data.message);
+      // Extract the original file name (before the timestamp)
+      const fullName = fileName.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+      const originalName = fullName.split("-")[0]; // Get the part before the timestamp
+      const extension = fullName.split(".").pop(); // Get the file extension
+
+      // Create a download URL for the file
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", fileName);
+
+      // Set the correct name for the downloaded file
+      link.setAttribute("download", `${originalName}.${extension}`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -72,18 +79,27 @@ export const File = () => {
                     {resource.description}
                   </p>
                   <div className="file-container grid grid-cols-4 gap-4">
-                    {resource.files?.map((file: string, index: number) => (
-                      <p
-                        key={index}
-                        title={
-                          file ? file.split("-").pop() : "No file available"
-                        }
-                        onClick={() => handleFileDownload(file)}
-                        className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
-                      >
-                        {file.split("-").pop()}
-                      </p>
-                    ))}
+                    {resource.files?.map((file: string, index: number) => {
+                      // Extract the filename with the extension
+                      const fullName = file.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+                      const originalName = fullName.split("-")[0]; // Get the part before the timestamp
+                      const extension = fullName.split(".").pop(); // Get the file extension
+
+                      return (
+                        <p
+                          key={index}
+                          title={
+                            originalName
+                              ? `${originalName}.${extension}`
+                              : "No file available"
+                          }
+                          onClick={() => handleFileDownload(file)}
+                          className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                        >
+                          {`${originalName}.${extension}`}
+                        </p>
+                      );
+                    })}
 
                     {resource.links?.map((link: string, index: number) => (
                       <a

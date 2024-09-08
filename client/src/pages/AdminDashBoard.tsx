@@ -1,6 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { SideBar } from "../components/SideBar";
 import { AdminHeader } from "../components/AdminHeader";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 export const AdminDashBoard = () => {
   const navItems = [
@@ -11,6 +14,15 @@ export const AdminDashBoard = () => {
     "Assign",
     "Log Out",
   ];
+
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
+  useEffect(() => {
+    if (!token) {
+      alert("Token expired, Please login again");
+      navigate("/login");
+    }
+  }, [token, navigate]);
 
   return (
     <>

@@ -74,11 +74,17 @@ export const TeacherAnnouncement = () => {
           responseType: "blob", // Ensure the response is treated as a file
         }
       );
-      // console.log("Response:", response.data.message);
+      // Extract the original file name (before the last '-')
+      const fullName = fileName.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+      const lastHyphenIndex = fullName.lastIndexOf("-"); // Find the last hyphen in the file name
+      const originalName = fullName.slice(0, lastHyphenIndex); // Get the name before the last hyphen
+      const extension = fullName.split(".").pop(); // Get the file extension
+
+      // Create a download URL for the file
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", fileName);
+      link.setAttribute("download", `${originalName}.${extension}`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -153,16 +159,28 @@ export const TeacherAnnouncement = () => {
               </div>
 
               <div className="file-container grid grid-cols-4 gap-4">
-                {announcement.files?.map((file: string, index: number) => (
-                  <p
-                    key={index}
-                    title={file ? file.split("-").pop() : "No file available"}
-                    onClick={() => handleFileDownload(file)}
-                    className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
-                  >
-                    {file.split("-").pop()}
-                  </p>
-                ))}
+                {announcement.files?.map((file: string, index: number) => {
+                  // Extract the filename with the extension
+                  const fullName = file.replace(/^uploads\\/, ""); // Remove the 'uploads\' part
+                  const lastHyphenIndex = fullName.lastIndexOf("-"); // Find the last hyphen in the file name
+                  const originalName = fullName.slice(0, lastHyphenIndex); // Get the name before the last hyphen
+                  const extension = fullName.split(".").pop(); // Get the file extension
+
+                  return (
+                    <p
+                      key={index}
+                      title={
+                        originalName
+                          ? `${originalName}.${extension}`
+                          : "No file available"
+                      }
+                      onClick={() => handleFileDownload(file)}
+                      className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                    >
+                      {`${originalName}.${extension}`}
+                    </p>
+                  );
+                })}
 
                 {announcement.links?.map((link: string, index: number) => (
                   <a

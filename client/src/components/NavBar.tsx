@@ -1,7 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
+interface DecodedToken {
+  user: { role: string };
+  iat: number;
+  exp: number;
+}
 export const NavBar = () => {
+  const [userRole, setUserRole] = useState<any>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      try {
+        const decodedToken: DecodedToken = jwtDecode(token);
+        console.log("Decoded : ", decodedToken);
+        console.log("User Role : ", decodedToken.user);
+        console.log("User Role : ", decodedToken.user.role);
+        setUserRole(decodedToken.user.role);
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    }
+  }, []);
+
+  const handleLoginClick = () => {
+    if (userRole === "admin") {
+      navigate("/admin-dashboard");
+    } else if (userRole === "teacher") {
+      navigate("/teacher-dashboard");
+    } else if (userRole === "student") {
+      navigate("/student-dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <>
       <section id="home-section" className="bg-gray-900 pb-[6%]">
@@ -40,12 +77,12 @@ export const NavBar = () => {
               </ScrollLink>
             </li>
             <li className="nav-item">
-              <Link
+              <button
                 className="px-6 py-1.5 rounded-full bg-green-700 nav-item-link text-white hover:bg-green-600"
-                to="/login"
+                onClick={handleLoginClick}
               >
                 Login
-              </Link>
+              </button>
             </li>
           </ul>
         </header>

@@ -43,4 +43,10 @@ router.get(
   downloadResourceFile
 );
 
+router.get(
+  "/student-dashboard/module/announcement/download/uploads/:filename",
+  authMiddleware,
+  downloadResourceFile
+);
+
 export default router;

@@ -245,19 +245,31 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
 
           {/* File Area */}
           <div className="file-area space-y-2">
-            {selectedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="file-item flex justify-between items-center border border-slate-700 p-2 rounded"
-              >
-                <div>{file.name}</div>
-                <X
-                  size={32}
-                  className="cursor-pointer"
-                  onClick={() => handleRemoveFile(file.name, index)}
-                />
-              </div>
-            ))}
+            {selectedFiles.map((file, index) => {
+              // Find the last occurrence of '-' in the file name
+              const lastHyphenIndex = file.name.lastIndexOf("-");
+              const extensionIndex = file.name.lastIndexOf("."); // Find the position of the file extension
+              const extension = file.name.slice(extensionIndex); // Get the file extension
+
+              const displayName =
+                lastHyphenIndex !== -1
+                  ? file.name.slice(0, lastHyphenIndex) + extension // Keep the extension
+                  : file.name; // If no hyphen is found, use the original name
+
+              return (
+                <div
+                  key={index}
+                  className="file-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                >
+                  <div>{displayName}</div>
+                  <X
+                    size={32}
+                    className="cursor-pointer"
+                    onClick={() => handleRemoveFile(file.name, index)}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Link Area */}

@@ -25,6 +25,7 @@ export const Login = () => {
         // localStorage.setItem("token", res.data.token);
         // Redirect to admin dashboard
         Cookies.set("token", res.data.token, { expires: 1 });
+        // Cookies.set("Hello", "world", { expires: 1 });
         login();
         if (res.data.role === "admin") {
           navigate("/admin-dashboard");

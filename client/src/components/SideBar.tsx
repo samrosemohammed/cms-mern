@@ -9,8 +9,9 @@ import {
   Megaphone,
   Layers3,
   ChevronLeft,
+  Settings,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultImage from "../assets/default-image.png";
 import brandImage from "../assets/brand-logo.png";
 import { useState, useEffect } from "react";
@@ -28,6 +29,8 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
   const [userDetails, setUserDetails] = useState<any>();
   const [isFormVisbile, setFormVisible] = useState<boolean>(false);
   const [group, setGroup] = useState<string>("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const editFormFields = [
     {
@@ -101,6 +104,12 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
     setFormVisible(false); // Close the form after update
   };
 
+  const handleSettings = () => {
+    if (location.pathname.includes("teacher-dashboard")) {
+      navigate("/teacher-dashboard/settings");
+    }
+  };
+
   const navIcons: { [key: string]: LucideIcon } = {
     Dashboard: LayoutGrid,
     Module: Folder,
@@ -149,6 +158,9 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
           case "Dashboard":
             route = "/student-dashboard";
             break;
+          case "Log Out":
+            route = "/student-dashboard/logout";
+            break;
           case "File":
             route = `/student-dashboard/module/file`;
             break;
@@ -163,6 +175,9 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
         switch (navItem) {
           case "Dashboard":
             route = "/teacher-dashboard";
+            break;
+          case "Log Out":
+            route = "/teacher-dashboard/logout";
             break;
           case "File":
             route = `/teacher-dashboard/module/file`;
@@ -225,11 +240,21 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
       <aside className="w-[20vw] h-screen bg-gray-800 fixed z-[997]">
         <header className="flex justify-between py-4 px-2 border-b border-slate-700">
           <img className="w-[30%]" src={brandImage} alt="Brand Logo" />
-          <button className="text-[14px] bg-green-800 text-slate-300 px-2.5 py-0.5 rounded">
-            {type}
-          </button>
+          <div className="flex gap-2 items-center">
+            {/* <button className="text-[14px] bg-green-800 text-slate-300 px-2.5 py-0.5 rounded">
+              {type}
+            </button> */}
+            <Settings
+              size={24}
+              className="text-slate-400 mr-2 cursor-pointer"
+              onClick={handleSettings}
+            />
+          </div>
         </header>
-
+        {/* <div className="mt-2 flex items-center justify-between mr-2">
+          <div></div>
+          <Settings size={20} className="text-slate-400" />
+        </div> */}
         <section className="main-section">
           <div className="flex justify-center flex-col items-center gap-2 my-12 group">
             <button

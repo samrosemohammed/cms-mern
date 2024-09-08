@@ -16,7 +16,7 @@ export const TeacherSideBar = () => {
         "Submit Work",
       ]);
     } else {
-      setNavItems(["Dashboard"]);
+      setNavItems(["Dashboard", "Log Out"]);
     }
   }, [location.pathname]);
 

@@ -25,6 +25,7 @@ import { File } from "./components/Student/File";
 import { Assignment } from "./components/Student/Assignment";
 import { Announcement } from "./components/Student/Announcement";
 import { SubmitAssignmentForm } from "./components/Student/SubmitAssignmentForm";
+import { Settings } from "./components/Teacher/Settings";
 
 const router = createBrowserRouter([
   {
@@ -128,6 +129,14 @@ const router = createBrowserRouter([
         path: "module/submit-work",
         element: <SubmitWork />,
       },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+      {
+        path: "logout",
+        element: <LogOutPopUp />,
+      },
     ],
   },
 
@@ -162,6 +171,10 @@ const router = createBrowserRouter([
       {
         path: "module/assignment/submit-work/resubmit/:assignmentObjectId",
         element: <SubmitAssignmentForm />,
+      },
+      {
+        path: "logout",
+        element: <LogOutPopUp />,
       },
     ],
   },

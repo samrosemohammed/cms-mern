@@ -3,8 +3,11 @@ import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
 import SubmitWork from "../models/SubmitAssignment.js";
+import { fileURLToPath } from "url";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const createTeacher = async (req, res) => {
   try {
@@ -220,6 +223,137 @@ export const getSubmitWork = async (req, res) => {
       .populate("studentId")
       .populate("assignmentId");
     res.status(200).json({ message: "Submit work fetch success", submitWork });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const updateChangeEmail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email, currentPasswordForEmail } = req.body;
+    console.log("Received data:", req.body);
+    if (!email || !currentPasswordForEmail) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const teacher = await Teacher.findById(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    const isMatch = await bcrypt.compare(
+      currentPasswordForEmail,
+      teacher.teacherPassword
+    );
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+    const teacherEmailExists = await Teacher.findOne({ teacherEmail: email });
+    if (teacherEmailExists) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+    const updatedTeacher = await Teacher.findByIdAndUpdate(
+      id,
+      { teacherEmail: email },
+      { new: true }
+    );
+    res.status(200).json(updatedTeacher);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const updatePasswordChange = async (req, res) => {
+  const { id } = req.params;
+  const { currentPasswordForPass, newPassword, reEnterNewPassword } = req.body;
+
+  try {
+    // if all the fields are empty string then return error msg
+    if (!currentPasswordForPass || !newPassword || !reEnterNewPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const teacher = await Teacher.findById(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    const isMatch = await bcrypt.compare(
+      currentPasswordForPass,
+      teacher.teacherPassword
+    );
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+    if (newPassword !== reEnterNewPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const newHashedPassword = await bcrypt.hash(newPassword, salt);
+    const updatedTeacher = await Teacher.findByIdAndUpdate(
+      id,
+      { teacherPassword: newHashedPassword },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ updatedTeacher, message: "Password updated successfully" });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const updateTeacherProfile = async (req, res) => {
+  const { id } = req.params;
+  const { fullName, mobileNumber } = req.body;
+
+  console.log("Received data:", req.body); // Should show the received form data
+  console.log("Received file:", req.file); // Should show the uploaded file info
+
+  try {
+    if (!fullName && !mobileNumber && !req.file) {
+      return res.status(400).json({ message: "No change detected" });
+    }
+    const teacher = await Teacher.findById(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+
+    // Update teacher name and mobile number if provided
+    teacher.teacherName = fullName || teacher.teacherName;
+    teacher.teacherMobileNo = mobileNumber || teacher.teacherMobileNo;
+
+    // If a new file is uploaded, delete the previous file and update with the new one
+    if (req.file) {
+      const previousImagePath = path.join(
+        __dirname,
+        "../uploads",
+        teacher.teacherImage
+      );
+
+      // Check if the previous file exists and delete it
+      if (fs.existsSync(previousImagePath)) {
+        fs.unlink(previousImagePath, (err) => {
+          if (err) {
+            console.error("Error deleting previous image:", err);
+          } else {
+            console.log("Previous image deleted successfully.");
+          }
+        });
+      }
+
+      // Update the teacher's image with the new file
+      teacher.teacherImage = req.file.filename;
+    }
+
+    const updatedTeacher = await teacher.save();
+
+    res
+      .status(200)
+      .json({ updatedTeacher, message: "Profile updated successfully" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server Error" });

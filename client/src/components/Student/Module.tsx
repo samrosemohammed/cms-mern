@@ -51,7 +51,7 @@ export const Module = () => {
         <div className="module-div grid grid-cols-3 gap-6">
           {modules.map((module: any) => (
             <div
-              key={module._id.moduleId}
+              key={module._id.moduleCode}
               className="bg-slate-800 rounded cursor-pointer"
               onClick={() =>
                 handleModuleClick(
