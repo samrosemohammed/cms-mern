@@ -30,32 +30,37 @@ export const LogOutPopUp = () => {
     <>
       <div className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center z-50">
         <section
-          className={`"max-w-[850px]" bg-slate-800 p-4 rounded relative`}
+          className={`max-w-[850px] bg-slate-800 p-2 rounded-lg relative`}
         >
-          <form className={`bg-slate-800 p-4 space-y-6`} action="">
+          <form className={`p-2 space-y-4`} action="">
             <div className="flex items-center justify-between">
               <div></div>
               <button type="button" onClick={handleCancel}>
-                <X size={28} />
+                <X className="hover:bg-slate-700 text-slate-300" size={28} />
               </button>
             </div>
-            <div className="text-[24px] text-slate-400">
-              <p>Are you sure you want to log out ?</p>
+            <div className="text-[18px]">
+              <p className="text-slate-300">
+                Are you sure you want to log out ?
+              </p>
             </div>
             <div></div>
-            <div className="flex gap-4 text-[18px]">
-              <button
-                className="cursor-pointer w-full rounded px-2 py-1 bg-red-700 hover:bg-red-800"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="cursor-pointer w-full rounded px-2 py-1 bg-green-700 hover:bg-green-800"
-                onClick={handleLogout}
-              >
-                Yes
-              </button>
+            <div className="flex justify-between text-[18px]">
+              <div></div>
+              <div className="space-x-1.5">
+                <button
+                  className="text-[16px] cursor-pointer rounded px-2 py-0.5 text-slate-300 hover:bg-slate-700"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="text-[16px] cursor-pointer rounded px-2 py-0.5 text-red-400  hover:bg-slate-700"
+                  onClick={handleLogout}
+                >
+                  Log out
+                </button>
+              </div>
             </div>
           </form>
         </section>

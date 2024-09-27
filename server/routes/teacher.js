@@ -8,6 +8,7 @@ import {
   updateChangeEmail,
   updatePasswordChange,
   updateTeacherProfile,
+  removeImage,
 } from "../controllers/teacherController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -51,4 +52,11 @@ router.put(
   upload.single("teacherImage"),
   updateTeacherProfile
 );
+
+router.delete(
+  "/teacher-dashboard/settings/remove-img/:id",
+  authMiddleware,
+  removeImage
+);
+
 export default router;

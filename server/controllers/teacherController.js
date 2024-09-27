@@ -317,6 +317,7 @@ export const updateTeacherProfile = async (req, res) => {
     if (!fullName && !mobileNumber && !req.file) {
       return res.status(400).json({ message: "No change detected" });
     }
+
     const teacher = await Teacher.findById(id);
     if (!teacher) {
       return res.status(404).json({ message: "Teacher not found" });
@@ -328,21 +329,24 @@ export const updateTeacherProfile = async (req, res) => {
 
     // If a new file is uploaded, delete the previous file and update with the new one
     if (req.file) {
-      const previousImagePath = path.join(
-        __dirname,
-        "../uploads",
-        teacher.teacherImage
-      );
+      // Check if there is an existing image to delete
+      if (teacher.teacherImage) {
+        const previousImagePath = path.join(
+          __dirname,
+          "../uploads",
+          teacher.teacherImage
+        );
 
-      // Check if the previous file exists and delete it
-      if (fs.existsSync(previousImagePath)) {
-        fs.unlink(previousImagePath, (err) => {
-          if (err) {
-            console.error("Error deleting previous image:", err);
-          } else {
-            console.log("Previous image deleted successfully.");
-          }
-        });
+        // Check if the previous file exists and delete it
+        if (fs.existsSync(previousImagePath)) {
+          fs.unlink(previousImagePath, (err) => {
+            if (err) {
+              console.error("Error deleting previous image:", err);
+            } else {
+              console.log("Previous image deleted successfully.");
+            }
+          });
+        }
       }
 
       // Update the teacher's image with the new file
@@ -354,6 +358,38 @@ export const updateTeacherProfile = async (req, res) => {
     res
       .status(200)
       .json({ updatedTeacher, message: "Profile updated successfully" });
+  } catch (err) {
+    console.error("Error from update profile ", err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const removeImage = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const teacher = await Teacher.findById(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+
+    if (!teacher.teacherImage) {
+      return res.status(400).json({ message: "No image to delete" });
+    }
+
+    const imagePath = path.join(__dirname, "../uploads", teacher.teacherImage);
+    if (fs.existsSync(imagePath)) {
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Error deleting image:", err);
+        } else {
+          console.log("Image deleted successfully.");
+        }
+      });
+    }
+
+    teacher.teacherImage = null;
+    const updatedTeacher = await teacher.save();
+    res.status(200).json({ updatedTeacher, message: "Image removed" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server Error" });

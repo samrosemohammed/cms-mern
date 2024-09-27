@@ -107,6 +107,8 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
   const handleSettings = () => {
     if (location.pathname.includes("teacher-dashboard")) {
       navigate("/teacher-dashboard/settings");
+    } else if (location.pathname.includes("student-dashboard")) {
+      navigate("/student-dashboard/settings");
     }
   };
 

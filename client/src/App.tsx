@@ -26,6 +26,7 @@ import { Assignment } from "./components/Student/Assignment";
 import { Announcement } from "./components/Student/Announcement";
 import { SubmitAssignmentForm } from "./components/Student/SubmitAssignmentForm";
 import { Settings } from "./components/Teacher/Settings";
+import { StudentSettings } from "./components/Student/StudentSettings";
 
 const router = createBrowserRouter([
   {
@@ -171,6 +172,10 @@ const router = createBrowserRouter([
       {
         path: "module/assignment/submit-work/resubmit/:assignmentObjectId",
         element: <SubmitAssignmentForm />,
+      },
+      {
+        path: "settings",
+        element: <StudentSettings />,
       },
       {
         path: "logout",

@@ -24,6 +24,8 @@ export const Settings = () => {
   const [reEnterNewPassword, setReEnterNewPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [serverMessage, setServerMessage] = useState<string>("");
+  const [isRemoveProfileVisible, setIsRemoveProfileVisible] =
+    useState<boolean>(false);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -192,6 +194,38 @@ export const Settings = () => {
     }
   };
 
+  const handleRemoveImage = () => {
+    console.log("Remove Image clicked");
+    setIsRemoveProfileVisible(true);
+  };
+
+  const handleCancelRemoveProfie = () => {
+    setIsRemoveProfileVisible(false);
+  };
+
+  const handleBackendRemoveImage = async (e: any) => {
+    e.preventDefault();
+    // setSelectedImage(defaultImage);
+    console.log("Remove Image from backend");
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/teacher-dashboard/settings/remove-img/${userDetails._id}`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        console.log("Response: ", response.data);
+        setServerMessage(response.data.message);
+        // setSelectedImage(defaultImage);
+        fetchUser();
+      }
+    } catch (err: any) {
+      console.error("Error:", err.response);
+      setServerMessage(err.response.data.message);
+      // setSelectedImage(defaultImage);
+    }
+    setIsRemoveProfileVisible(false);
+  };
+
   const imgUrl =
     userDetails?.teacherImage !== null
       ? `http://localhost:5000/uploads/${userDetails?.teacherImage}`
@@ -256,7 +290,7 @@ export const Settings = () => {
             </p>
           </form>
           <div className="for-image-content">
-            <div className="relative">
+            <div className="relative ">
               <div
                 className="bg-slate-700 rounded-full p-2 absolute -right-2 -top-1 cursor-pointer"
                 title="Edit Image"
@@ -264,11 +298,22 @@ export const Settings = () => {
               >
                 <Pencil size={18} className="text-slate-300" />
               </div>
-              <img
-                className="w-[90px] h-[90px] object-cover rounded-full border border-slate-400"
-                src={selectedImage || imgUrl}
-                alt="User"
-              />
+              <div className="group">
+                <img
+                  className="w-[90px] h-[90px] object-cover rounded-full border border-slate-400"
+                  src={selectedImage || imgUrl}
+                  alt="User"
+                />
+                <button
+                  className="text-[14px] text-slate-300 absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
+               bg-red-800 py-1 px-3 rounded-full opacity-0 
+               group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300"
+                  onClick={handleRemoveImage}
+                >
+                  Remove
+                </button>
+              </div>
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -410,6 +455,42 @@ export const Settings = () => {
                   className="bg-green-800 px-4 py-0.5 rounded"
                 >
                   Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+      )}
+
+      {isRemoveProfileVisible && (
+        <section className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center text-slate-300">
+          <form
+            className="max-w-screen-sm bg-slate-800 p-4 rounded space-y-6"
+            action=""
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-[18px]">Remove Profile Image ?</h3>
+              <X
+                className="hover:bg-slate-700 cursor-pointer rounded"
+                size={28}
+                onClick={handleCancelRemoveProfie}
+              />
+            </div>
+            <p>Are you sure you want to remove your profile picutre ?</p>
+            <div className="flex item-center justify-between">
+              <div></div>
+              <div className="space-x-4">
+                <button
+                  onClick={handleCancelRemoveProfie}
+                  className="border-2 border-slate-600 px-4 py-0.5 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleBackendRemoveImage}
+                  className="bg-red-800 px-4 py-0.5 rounded"
+                >
+                  Remove
                 </button>
               </div>
             </div>

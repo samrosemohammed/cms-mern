@@ -127,7 +127,7 @@ export const SubmitWork = () => {
                       work.status === "On Time"
                         ? "text-green-600"
                         : work.status === "Late Submit"
-                        ? "text-red-700"
+                        ? "text-red-600"
                         : ""
                     } text-center text-[12px] font-semibold`}
                   >
