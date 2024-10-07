@@ -1,6 +1,8 @@
 import express from "express";
 import connectDB from "./config/db.js";
 import cors from "cors";
+import { Server as SocketServer } from "socket.io";
+import http from "http";
 import authRoutes from "./routes/auth.js";
 import studentRoutes from "./routes/student.js";
 import cookieParser from "cookie-parser";
@@ -17,12 +19,29 @@ import submitAssignmentRoutes from "./routes/submitAssignment.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // Connect Database
 connectDB();
+
+// Socket.io
+export const io = new SocketServer(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+// const connectedClients = {};
+io.on("connection", (socket) => {
+  console.log("Socket io connected: ", socket.id);
+  // connectedClients[socket.id] = socket;
+  socket.on("disconnect", () => {
+    console.log("Socket io disconnected");
+  });
+});
 
 // middleware
 app.use(express.json());
@@ -37,7 +56,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // FOR LOGIN ROUTES
 app.use("/api/auth", authRoutes);
-
 app.use("/api", studentRoutes);
 app.use("/api", teacherRoutes);
 app.use("/api", moduleRoutes);
@@ -47,29 +65,5 @@ app.use("/api", assignmentRoutes);
 app.use("/api", announcementRoutes);
 app.use("/api", userStudentRoutes);
 app.use("/api", submitAssignmentRoutes);
-// app.post("/login", async (req, res) => {
-//   const { email, password } = req.body;
 
-//   if (!email || !password) {
-//     return res.status(400).json({ message: "Email and password are required" });
-//   }
-
-//   const login = await User.findOne({ email });
-//   console.log(login);
-//   if (!login) {
-//     return res.status(400).json({ message: "User not found" });
-//   }
-//   console.log(password);
-//   console.log(login.password);
-
-//   // for checking password
-//   if (password != login.password) {
-//     return res.status(400).json({ message: "Password is incorrect" });
-//   }
-
-//   return res
-//     .status(200)
-//     .json({ success: true, message: "Login successful", user: login });
-// });
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

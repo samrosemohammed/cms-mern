@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import SubmitWork from "../models/SubmitAssignment.js";
 import { fileURLToPath } from "url";
+import { io } from "../server.js";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const __filename = fileURLToPath(import.meta.url);
@@ -354,7 +355,7 @@ export const updateTeacherProfile = async (req, res) => {
     }
 
     const updatedTeacher = await teacher.save();
-
+    io.emit("userUpdated", updatedTeacher);
     res
       .status(200)
       .json({ updatedTeacher, message: "Profile updated successfully" });
@@ -389,7 +390,10 @@ export const removeImage = async (req, res) => {
 
     teacher.teacherImage = null;
     const updatedTeacher = await teacher.save();
-    res.status(200).json({ updatedTeacher, message: "Image removed" });
+    io.emit("userUpdated", updatedTeacher);
+    res
+      .status(200)
+      .json({ updatedTeacher, message: "Image removed permanently" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server Error" });

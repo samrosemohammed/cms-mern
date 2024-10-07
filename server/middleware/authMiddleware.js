@@ -5,14 +5,14 @@ import Teacher from "../models/Teacher.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
-  console.log("Token from Auth Middleware = ", token);
+  // console.log("Token from Auth Middleware = ", token);
   if (!token) {
     return res.status(401).json({ message: "Unauthorized - Token expire" });
   }
 
   try {
     const decoded = jwt.verify(token, "I'm_Batman");
-    console.log("Auth Middleware Decoded = ", decoded);
+    // console.log("Auth Middleware Decoded = ", decoded);
     req.user = {
       _id: decoded.user._id,
       email: decoded.user.email,
@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
 
     if (req.user.role === "admin") {
       req.userDetails = await User.findById(req.user._id).select("-password");
-      console.log("User Details :", req.userDetails);
+      // console.log("User Details :", req.userDetails);
     } else if (req.user.role === "stduent") {
       req.userDetails = await Student.findById(req.user._id).select(
         "-studentPassword"
@@ -30,7 +30,7 @@ const authMiddleware = async (req, res, next) => {
       req.userDetails = await Teacher.findById(req.user._id).select(
         "-teacherPassword"
       );
-      console.log("User Details :", req.userDetails);
+      // console.log("User Details :", req.userDetails);
     }
 
     next();

@@ -4,6 +4,10 @@ import {
   getStudents,
   editStudent,
   deleteStudent,
+  removeImage,
+  updateChangeEmail,
+  updatePasswordChange,
+  updateStudentProfile,
 } from "../controllers/studentController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -23,6 +27,32 @@ router.put(
   upload.single("studentImage"),
   editStudent
 );
+
+router.put(
+  "/student-dashboard/settings/change-email/:id",
+  authMiddleware,
+  updateChangeEmail
+);
+
+router.put(
+  "/student-dashboard/settings/change-password/:id",
+  authMiddleware,
+  updatePasswordChange
+);
+
+router.put(
+  "/student-dashboard/settings/profile/:id",
+  authMiddleware,
+  upload.single("studentImage"),
+  updateStudentProfile
+);
+
 router.delete("/admin-dashboard/student/:id", authMiddleware, deleteStudent);
+
+router.delete(
+  "/student-dashboard/settings/remove-img/:id",
+  authMiddleware,
+  removeImage
+);
 
 export default router;

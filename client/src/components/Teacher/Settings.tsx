@@ -129,14 +129,9 @@ export const Settings = () => {
       console.log("Response: ", response);
       if (response.status === 200) {
         console.log("Response: ", response);
-
-        // Reset the form states after successful response
         setEmail("");
         setCurrentPasswordForEmail("");
-
-        // Refetch user details to update email in the placeholder
         await fetchUser();
-        // Close the form after a successful response
         setIsChangeEmailFormVisbile(false);
       }
     } catch (err: any) {
@@ -147,7 +142,6 @@ export const Settings = () => {
     console.log("ID: ", userDetails._id);
     console.log("Email:", email);
     console.log("Current Password:", currentPasswordForEmail);
-    // setIsChangeEmailFormVisbile(false);
   };
 
   const handleSaveChanges = async () => {
@@ -159,6 +153,7 @@ export const Settings = () => {
     }
     if (mobileNumber && mobileNumber !== userDetails?.teacherMobileNo) {
       formData.append("mobileNumber", mobileNumber);
+      setServerMessage("Mobile Number Exists");
     }
     if (selectedFile) {
       formData.append("teacherImage", selectedFile[0]);
@@ -181,14 +176,12 @@ export const Settings = () => {
         setFullName("");
         setMobileNumber("");
         setServerMessage(response.data.message);
-        // Refetch user details to update the placeholder
         await fetchUser();
       }
     } catch (err: any) {
       console.error("Error:", err.response);
       setServerMessage(err.response.data.message);
     }
-
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
@@ -205,7 +198,7 @@ export const Settings = () => {
 
   const handleBackendRemoveImage = async (e: any) => {
     e.preventDefault();
-    // setSelectedImage(defaultImage);
+    setServerMessage("");
     console.log("Remove Image from backend");
     try {
       const response = await axios.delete(
@@ -215,13 +208,18 @@ export const Settings = () => {
       if (response.status === 200) {
         console.log("Response: ", response.data);
         setServerMessage(response.data.message);
-        // setSelectedImage(defaultImage);
+        setSelectedImage(null);
+        setSelectedFile(null);
         fetchUser();
       }
     } catch (err: any) {
       console.error("Error:", err.response);
       setServerMessage(err.response.data.message);
-      // setSelectedImage(defaultImage);
+      if ((err.response.data.message = "No Image to delete")) {
+        setServerMessage("Image removed");
+        setSelectedImage(null);
+        setSelectedFile(null);
+      }
     }
     setIsRemoveProfileVisible(false);
   };

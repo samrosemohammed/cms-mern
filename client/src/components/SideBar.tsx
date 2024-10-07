@@ -17,6 +17,9 @@ import brandImage from "../assets/brand-logo.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { SystemForm } from "./SystemForm";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:5000");
 
 interface SideBarProps {
   type: string;
@@ -87,6 +90,17 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
   };
   useEffect(() => {
     fetchUser();
+    socket.on("userUpdated", (updatedUser) => {
+      console.log("User Updated", updatedUser);
+      setUserName(
+        updatedUser.studentName || updatedUser.teacherName || updatedUser.name
+      );
+      setUserDetails(updatedUser);
+    });
+
+    return () => {
+      socket.off("userUpdated");
+    };
   }, []);
 
   const hadleEditProfile = () => {
@@ -259,12 +273,6 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
         </div> */}
         <section className="main-section">
           <div className="flex justify-center flex-col items-center gap-2 my-12 group">
-            <button
-              onClick={hadleEditProfile}
-              className="text-slate-400 text-[14px] bg-slate-700 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            >
-              Edit Profile
-            </button>
             <img
               className="object-cover w-16 h-16 rounded-full border border-slate-400"
               src={imagePath}

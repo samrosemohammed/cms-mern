@@ -78,7 +78,7 @@ export const NavBar = () => {
             </li>
             <li className="nav-item">
               <button
-                className="px-6 py-1.5 rounded-full bg-green-700 nav-item-link text-white hover:bg-green-600"
+                className="px-6 rounded-full bg-green-700 nav-item-link text-white hover:bg-green-600"
                 onClick={handleLoginClick}
               >
                 Login
