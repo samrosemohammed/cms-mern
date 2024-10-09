@@ -4,6 +4,7 @@ import { X, Upload, Link2 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const AnnouncementForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -15,6 +16,7 @@ export const AnnouncementForm = () => {
   const [announcements, setAnnouncements] = useState<any>([]);
   const [serverMessage, setServerMessage] = useState("");
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { id } = useParams();
 
   useEffect(() => {
@@ -193,7 +195,9 @@ export const AnnouncementForm = () => {
             <textarea
               id="announce-description"
               name="announce-description"
-              className="w-full bg-transparent border border-slate-700 p-4 h-[10vw] resize-none outline-none"
+              className={`${
+                theme === "dark" ? "dark:border-slate-700" : "border-slate-300"
+              } w-full bg-transparent border p-4 h-[10vw] resize-none outline-none rounded`}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
@@ -215,7 +219,11 @@ export const AnnouncementForm = () => {
               return (
                 <div
                   key={index}
-                  className="file-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:border-slate-700"
+                      : "border-slate-300"
+                  } file-item flex justify-between items-center border p-2 rounded`}
                 >
                   <div>{displayName}</div>
                   <X
@@ -233,7 +241,11 @@ export const AnnouncementForm = () => {
             {links.map((link, index) => (
               <div
                 key={index}
-                className="link-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "dark:border-slate-700"
+                    : "border-slate-300"
+                } link-item flex justify-between items-center border p-2 rounded`}
               >
                 <div>
                   <p>Link</p>
@@ -248,7 +260,11 @@ export const AnnouncementForm = () => {
             ))}
           </div>
 
-          <div className="attach-resource border border-slate-700 p-4 rounded">
+          <div
+            className={`${
+              theme === "dark" ? "dark:border-slate-700 " : "border-slate-300"
+            } attach-resource border p-4 rounded`}
+          >
             <h3 className="text-[18px] mb-4">Attach</h3>
             <div className="flex justify-center items-center h-full">
               <div className="flex gap-6">

@@ -5,11 +5,13 @@ import { EllipsisVertical, Bookmark, NotepadText } from "lucide-react";
 import axios from "axios";
 import { FeedBack } from "../FeedBack";
 import moment from "moment";
+import { useTheme } from "../../utlis/ThemeContext";
 export const TeacherAssignment = () => {
   const [assignments, setAssignments] = useState<any>([]);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState(null);
   const [serverMessage, setServerMessage] = useState("");
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const handleCreateAssignment = () => {
     console.log("Create Assignment Clicked");
     navigate("/teacher-dashboard/module/assignment/create");
@@ -110,7 +112,11 @@ export const TeacherAssignment = () => {
       {serverMessage && <FeedBack message={serverMessage} />}
       <section>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="tracking-wider text-[18px] text-slate-300 border-b inline-block border-green-400 capitalize">
+          <h1
+            className={`${
+              theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+            } tracking-wider text-[18px]  border-b inline-block border-green-400 capitalize`}
+          >
             Assignment
           </h1>
           <Button onClick={handleCreateAssignment} type={"Create Assignment"} />
@@ -121,7 +127,9 @@ export const TeacherAssignment = () => {
             {assignments.map((assignment: any) => (
               <li
                 key={assignment._id}
-                className="border-b border-slate-600 p-4 rounded"
+                className={`${
+                  theme === "dark" ? "dark:border-slate-600" : "border-gray-300"
+                } border-b p-4 rounded`}
               >
                 <div className="flex justify-between mb-5">
                   <div className="flex items-center gap-2">
@@ -130,7 +138,13 @@ export const TeacherAssignment = () => {
                   </div>
 
                   <div className="flex items-center gap-2 relative">
-                    <p className="text-slate-400 text-[14px]">
+                    <p
+                      className={`${
+                        theme === "dark"
+                          ? "dark:text-slate-400"
+                          : "text-gray-500"
+                      }  text-[14px]`}
+                    >
                       <span className="mr-2">Due</span>
                       {moment(assignment.DueDate).year() === currentYear
                         ? moment(assignment.DueDate).format("MMM D")
@@ -142,19 +156,35 @@ export const TeacherAssignment = () => {
                     </p>
                     <EllipsisVertical
                       onClick={() => handleOption(assignment._id)}
-                      className="cursor-pointer hover:bg-slate-800 rounded-full"
+                      className={`${
+                        theme === "dark"
+                          ? "dark:hover:bg-slate-800"
+                          : "hover:bg-gray-200 text-gray-500"
+                      } cursor-pointer  rounded-full`}
                     />
                     {selectedAssignmentId === assignment._id && (
-                      <div className="absolute top-8 right-3 bg-slate-800 rounded">
+                      <div
+                        className={`${
+                          theme === "dark" ? "dark:bg-slate-800" : "bg-gray-200"
+                        } absolute top-8 right-3 rounded`}
+                      >
                         <ul className="space-y-2">
                           <li
-                            className="hover:bg-slate-700 py-1.5 px-4 cursor-pointer"
+                            className={` ${
+                              theme === "dark"
+                                ? "dark:hover:bg-slate-700"
+                                : "hover:bg-gray-300"
+                            }  py-1.5 px-4 cursor-pointer`}
                             onClick={() => handleEditAssignment(assignment._id)}
                           >
                             Edit
                           </li>
                           <li
-                            className="hover:bg-slate-700 py-1.5 px-4 cursor-pointer"
+                            className={` ${
+                              theme === "dark"
+                                ? "dark:hover:bg-slate-700"
+                                : "hover:bg-gray-300"
+                            }  py-1.5 px-4 cursor-pointer`}
                             onClick={() =>
                               handleDeleteAssignment(assignment._id)
                             }
@@ -167,7 +197,11 @@ export const TeacherAssignment = () => {
                   </div>
                 </div>
                 <div className="">
-                  <p className="text-slate-400 text-[14px] mb-4">
+                  <p
+                    className={`${
+                      theme === "dark" ? "dark:text-slate-400" : "text-gray-500"
+                    }  text-[14px] mb-4`}
+                  >
                     Posted
                     <span className="ml-2">
                       {moment(assignment.createdAt).year() === currentYear
@@ -205,7 +239,11 @@ export const TeacherAssignment = () => {
                               : "No file available"
                           }
                           onClick={() => handleFileDownload(file)}
-                          className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                          className={`${
+                            theme === "dark"
+                              ? "dark:hover:bg-slate-800 dark:border-slate-700"
+                              : "hover:bg-gray-200"
+                          } cursor-pointer dynamic-file-name border p-4 rounded  truncate whitespace-nowrap overflow-hidden`}
                         >
                           {`${originalName}.${extension}`}
                         </p>
@@ -219,7 +257,11 @@ export const TeacherAssignment = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={link}
-                        className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                        className={`${
+                          theme === "dark"
+                            ? "dark:hover:bg-slate-800 dark:border-slate-700"
+                            : "hover:bg-gray-200 border-slate-300"
+                        } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                       >
                         {link}
                       </a>

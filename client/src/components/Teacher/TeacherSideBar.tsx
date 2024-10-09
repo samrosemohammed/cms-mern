@@ -2,7 +2,14 @@ import { SideBar } from "../SideBar";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-export const TeacherSideBar = () => {
+interface TeacherSideBar {
+  isSidebarVisible: boolean;
+  setSidebarVisible: (visible: boolean) => void;
+}
+export const TeacherSideBar = ({
+  isSidebarVisible,
+  setSidebarVisible,
+}: TeacherSideBar) => {
   const location = useLocation();
   const [navItems, setNavItems] = useState<string[]>(["Dashboard"]);
 
@@ -22,7 +29,13 @@ export const TeacherSideBar = () => {
 
   return (
     <>
-      <SideBar type={"Teacher"} navList={navItems} role="teacher" />
+      <SideBar
+        isSidebarVisible={isSidebarVisible}
+        setSidebarVisible={setSidebarVisible}
+        type={"Teacher"}
+        navList={navItems}
+        role="teacher"
+      />
     </>
   );
 };

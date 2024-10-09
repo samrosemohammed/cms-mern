@@ -5,8 +5,10 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const AssignmentForm = () => {
+  const { theme } = useTheme();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -224,7 +226,9 @@ export const AssignmentForm = () => {
             <input
               id="module-file-title"
               name="module-file-title"
-              className="outline-none w-full bg-transparent border border-slate-700 p-4"
+              className={`${
+                theme === "dark" ? "dark:border-slate-700" : "border-slate-300"
+              } outline-none w-full bg-transparent border p-4 rounded`}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -239,7 +243,9 @@ export const AssignmentForm = () => {
               placeholder="Optional"
               id="module-file-description"
               name="module-file-description"
-              className="w-full bg-transparent border border-slate-700 p-4 h-[10vw] resize-none outline-none"
+              className={`${
+                theme === "dark" ? "dark:border-slate-700" : "border-slate-300"
+              } w-full bg-transparent border  p-4 h-[10vw] resize-none outline-none rounded`}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
@@ -279,7 +285,11 @@ export const AssignmentForm = () => {
             {links.map((link, index) => (
               <div
                 key={index}
-                className="link-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "dark:border-slate-700"
+                    : "border-slate-300"
+                } link-item flex justify-between items-center border p-2 rounded`}
               >
                 <div>
                   <p>Link</p>
@@ -304,7 +314,11 @@ export const AssignmentForm = () => {
                 id="assign-date"
                 name="assign-date"
                 value={date}
-                className="text-slate-400 outline-none w-full bg-transparent border border-slate-700 p-4"
+                className={`${
+                  theme === "dark"
+                    ? "dark:border-slate-700 dark:text-slate-400"
+                    : "border-slate-300"
+                }  outline-none w-full bg-transparent border p-4`}
                 type="date"
                 onChange={(e) => setDate(e.target.value)}
               />
@@ -313,13 +327,21 @@ export const AssignmentForm = () => {
                 id="assign-time"
                 name="assign-time"
                 value={time}
-                className="text-slate-400 outline-none w-full bg-transparent border border-slate-700 p-4"
+                className={`${
+                  theme === "dark"
+                    ? "dark:border-slate-700 dark:text-slate-400"
+                    : "border-slate-300"
+                }  outline-none w-full bg-transparent border p-4`}
                 onChange={(e) => setTime(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="attach-resource border border-slate-700 p-4 rounded">
+          <div
+            className={`${
+              theme === "dark" ? "dark:border-slate-700 " : "border-slate-300"
+            } attach-resource border p-4 rounded`}
+          >
             <h3 className="text-[18px] mb-4">Attach</h3>
             <div className="flex justify-center items-center h-full">
               <div className="flex gap-6">

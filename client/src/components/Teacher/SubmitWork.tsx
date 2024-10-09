@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const SubmitWork = () => {
   const [submitWork, setSubmitWork] = useState<any>([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchSubmitWork = async () => {
@@ -30,13 +32,27 @@ export const SubmitWork = () => {
     <>
       <section>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="tracking-wider text-[18px] text-slate-300 border-b inline-block border-green-400 capitalize">
+          <h1
+            className={`${
+              theme === "dark" ? "dark:text-slate-300" : "text-gray-600"
+            } tracking-wider text-[18px] border-b inline-block border-green-400 capitalize`}
+          >
             Submitted Work
           </h1>
         </div>
         <div className="overflow-x-auto">
-          <table className="max-w-screen-xl text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-            <thead className="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table
+            className={`${
+              theme === "dark" ? "dark:text-gray-400" : "text-gray-500"
+            } max-w-screen-xl text-sm text-left rtl:text-right`}
+          >
+            <thead
+              className={`${
+                theme === "dark"
+                  ? "dark:bg-gray-700 dark:text-gray-400"
+                  : "text-gray-500 bg-gray-200"
+              } text-sm uppercase`}
+            >
               <tr>
                 <th scope="col" className="px-6 py-3">
                   ID
@@ -68,17 +84,25 @@ export const SubmitWork = () => {
               {submitWork.map((work: any, index: any) => (
                 <tr
                   key={index}
-                  className="submit-parent bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-gray-800 dark:border-gray-700"
+                      : "bg-white  shadow-lg"
+                  } submit-parent border-b`}
                 >
                   <th
                     scope="row"
-                    className="flex items-center gap-3 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-slate-300"
+                    className={`${
+                      theme === "dark" ? "dark:text-slate-300" : "text-gray-900"
+                    } flex items-center gap-3 px-6 py-4 font-medium  whitespace-nowrap `}
                   >
                     <p>{work.studentId.studentID}</p>
                   </th>
                   <td className="px-6 py-4">{work.studentId.studentName}</td>
                   <td className="px-6 py-4">{work.assignGroup}</td>
-                  <td className="px-6 py-4">{work.assignmentId.title}</td>
+                  <td className="px-6 py-4">
+                    {work.assignmentId?.title || "No Title"}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-3">
                       {work.files && work.files.length > 0 ? (
@@ -127,7 +151,9 @@ export const SubmitWork = () => {
                       work.status === "On Time"
                         ? "text-green-600"
                         : work.status === "Late Submit"
-                        ? "text-red-600"
+                        ? theme === "dark"
+                          ? "text-red-600"
+                          : "text-red-400"
                         : ""
                     } text-center text-[12px] font-semibold`}
                   >

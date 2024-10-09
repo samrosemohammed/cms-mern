@@ -27,6 +27,7 @@ import { Announcement } from "./components/Student/Announcement";
 import { SubmitAssignmentForm } from "./components/Student/SubmitAssignmentForm";
 import { Settings } from "./components/Teacher/Settings";
 import { StudentSettings } from "./components/Student/StudentSettings";
+import { ThemeProvider } from "./utlis/ThemeContext";
 
 const router = createBrowserRouter([
   {
@@ -187,9 +188,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

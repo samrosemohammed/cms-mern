@@ -118,7 +118,7 @@ export const AdminModule = () => {
           <div></div>
           <Button onClick={handleCreateModule} type="Create Module" />
         </div>
-        <div className="module-div grid grid-cols-3 gap-6">
+        <div className="module-div grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {modules.map((modulee: any) => (
             <div key={modulee._id} className="bg-slate-800 rounded">
               <img

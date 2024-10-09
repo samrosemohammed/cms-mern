@@ -3,8 +3,10 @@ import defaultImage from "../../assets/default-image.png";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const Settings = () => {
+  const { theme } = useTheme();
   const [userDetails, setUserDetails] = useState<any>();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null);
@@ -236,7 +238,12 @@ export const Settings = () => {
         <div className="flex gap-8">
           <form action="" className="settings-form flex-1 space-y-6">
             <div className="space-y-2">
-              <label htmlFor="full-name" className="text-slate-300">
+              <label
+                htmlFor="full-name"
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                }`}
+              >
                 Full Name
               </label>
               <input

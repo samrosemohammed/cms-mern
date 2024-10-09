@@ -15,6 +15,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultImage from "../assets/default-image.png";
 import brandImage from "../assets/brand-logo.png";
 import { useState, useEffect } from "react";
+import { useTheme } from "../utlis/ThemeContext";
 import axios from "axios";
 import { SystemForm } from "./SystemForm";
 import io from "socket.io-client";
@@ -25,15 +26,26 @@ interface SideBarProps {
   type: string;
   navList?: string[];
   role?: string;
+  isSidebarVisible: boolean;
+  setSidebarVisible: (visible: boolean) => void;
 }
 
-export const SideBar = ({ type, navList, role }: SideBarProps) => {
+export const SideBar = ({
+  type,
+  navList,
+  role,
+  isSidebarVisible,
+  setSidebarVisible,
+}: SideBarProps) => {
+  const { theme } = useTheme();
   const [userName, setUserName] = useState<string>("");
   const [userDetails, setUserDetails] = useState<any>();
   const [isFormVisbile, setFormVisible] = useState<boolean>(false);
   const [group, setGroup] = useState<string>("");
+  const [activeNavItem, setActiveNavItem] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [isMediumScreen, setIsMediumScreen] = useState<boolean>(false);
 
   const editFormFields = [
     {
@@ -61,6 +73,15 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
       id: "adminImage",
     },
   ];
+
+  const checkScreenSize = () => {
+    const width = window.innerWidth;
+    if (width < 768) {
+      setIsMediumScreen(true);
+    } else {
+      setIsMediumScreen(false);
+    }
+  };
 
   const fetchUser = async () => {
     try {
@@ -125,6 +146,17 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
       navigate("/student-dashboard/settings");
     }
   };
+
+  // Set up resize event listener to track window size
+  useEffect(() => {
+    checkScreenSize(); // Check on component mount
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
 
   const navIcons: { [key: string]: LucideIcon } = {
     Dashboard: LayoutGrid,
@@ -219,7 +251,23 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
         <Link
           key={key}
           to={route}
-          className="nav-li hover:bg-slate-700 p-4 cursor-pointer flex items-center gap-4 nav-link"
+          onClick={() => {
+            setActiveNavItem(navItem); // Set the active item on click
+            if (isMediumScreen) {
+              setSidebarVisible(false);
+            }
+          }}
+          className={`nav-li p-4 cursor-pointer flex items-center gap-4 nav-link ${
+            activeNavItem === navItem
+              ? theme === "dark"
+                ? "dark:bg-slate-700"
+                : "bg-gray-200"
+              : ""
+          } ${
+            theme === "dark"
+              ? "dark:hover:bg-slate-700"
+              : "text-gray-500 hover:bg-gray-200"
+          }`}
         >
           <Icon /> {navItem}
         </Link>
@@ -242,6 +290,8 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
       ? `http://localhost:5000/uploads/${userDetails.image}`
       : defaultImage;
 
+  console.log(isSidebarVisible);
+
   return (
     <>
       {isFormVisbile && (
@@ -253,8 +303,18 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
           fetchData={handleProfileUpdate} // Refresh data after update
         />
       )}
-      <aside className="w-[20vw] h-screen bg-gray-800 fixed z-[997]">
-        <header className="flex justify-between py-4 px-2 border-b border-slate-700">
+      <aside
+        className={`w-[50vw] md:w-[20vw] h-screen fixed z-[997] transition-transform ${
+          isSidebarVisible ? "translate-x-0" : "-translate-x-full"
+        } ${theme === "dark" ? "dark:bg-slate-800" : "shadow-md"}`}
+      >
+        <header
+          className={`${
+            theme === "dark"
+              ? "dark:border-slate-700"
+              : "text-gray-500 border-gray-300"
+          } flex justify-between py-4 px-2 border-b`}
+        >
           <img className="w-[30%]" src={brandImage} alt="Brand Logo" />
           <div className="flex gap-2 items-center">
             {/* <button className="text-[14px] bg-green-800 text-slate-300 px-2.5 py-0.5 rounded">
@@ -262,7 +322,7 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
             </button> */}
             <Settings
               size={24}
-              className="text-slate-400 mr-2 cursor-pointer"
+              className="mr-2 cursor-pointer"
               onClick={handleSettings}
             />
           </div>
@@ -278,7 +338,11 @@ export const SideBar = ({ type, navList, role }: SideBarProps) => {
               src={imagePath}
               alt={userDetails?.name ? userDetails.name : "Default User"}
             />
-            <p className="text-[14px] text-slate-400 dynamic-user-name">
+            <p
+              className={` ${
+                theme === "dark" ? "dark:text-slate-400" : "text-gray-500"
+              } text-[14px]  dynamic-user-name`}
+            >
               {userName ? userName : "Default User"}
             </p>
           </div>

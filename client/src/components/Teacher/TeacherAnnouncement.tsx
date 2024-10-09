@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { Bookmark, EllipsisVertical, Minus } from "lucide-react";
 import axios from "axios";
 import moment from "moment";
+import { useTheme } from "../../utlis/ThemeContext";
 export const TeacherAnnouncement = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [announcements, setAnnouncements] = useState<any>([]);
   const [selectedAnnouncementId, setSelectedAnnouncementId] = useState(null);
   const handleCreateAnnouncement = () => {
@@ -98,7 +100,11 @@ export const TeacherAnnouncement = () => {
     <>
       <section>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="tracking-wider text-[18px] text-slate-300 border-b inline-block border-green-400 capitalize">
+          <h1
+            className={`${
+              theme === "dark" ? "dark:text-slate-300" : "text-gray-600"
+            } tracking-wider text-[18px] border-b inline-block border-green-400 capitalize`}
+          >
             Announcement
           </h1>
           <Button
@@ -110,7 +116,9 @@ export const TeacherAnnouncement = () => {
         <ol className="space-y-8">
           {announcements.map((announcement: any) => (
             <li
-              className="border-b border-slate-600 p-4 rounded"
+              className={`${
+                theme === "dark" ? "dark:border-slate-600" : "border-gray-300"
+              } border-b p-4 rounded`}
               key={announcement._id}
             >
               <div className="flex justify-between mb-6">
@@ -121,7 +129,11 @@ export const TeacherAnnouncement = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 relative">
-                  <p className="text-slate-400 text-[14px]">
+                  <p
+                    className={`${
+                      theme === "dark" ? "dark:text-slate-400" : "text-gray-500"
+                    }  text-[14px]`}
+                  >
                     Posted
                     <span className="ml-2">
                       {moment(announcement.createdAt).year() === currentYear
@@ -131,13 +143,25 @@ export const TeacherAnnouncement = () => {
                   </p>
                   <EllipsisVertical
                     onClick={() => handleOption(announcement._id)}
-                    className="cursor-pointer hover:bg-slate-800 rounded-full"
+                    className={`${
+                      theme === "dark"
+                        ? "dark:hover:bg-slate-800"
+                        : "hover:bg-gray-200 text-gray-500"
+                    } cursor-pointer  rounded-full`}
                   />
                   {selectedAnnouncementId === announcement._id && (
-                    <div className="absolute top-8 right-3 bg-slate-800 rounded">
+                    <div
+                      className={`${
+                        theme === "dark" ? "dark:bg-slate-800" : "bg-gray-200"
+                      } absolute top-8 right-3 rounded`}
+                    >
                       <ul className="space-y-2">
                         <li
-                          className="hover:bg-slate-700 py-1.5 px-4 cursor-pointer"
+                          className={` ${
+                            theme === "dark"
+                              ? "dark:hover:bg-slate-700"
+                              : "hover:bg-gray-300"
+                          }  py-1.5 px-4 cursor-pointer`}
                           onClick={() =>
                             handleEditAnnouncement(announcement._id)
                           }
@@ -145,7 +169,11 @@ export const TeacherAnnouncement = () => {
                           Edit
                         </li>
                         <li
-                          className="hover:bg-slate-700 py-1.5 px-4 cursor-pointer"
+                          className={` ${
+                            theme === "dark"
+                              ? "dark:hover:bg-slate-700"
+                              : "hover:bg-gray-300"
+                          }  py-1.5 px-4 cursor-pointer`}
                           onClick={() =>
                             handleDeleteAnnouncement(announcement._id)
                           }
@@ -175,7 +203,11 @@ export const TeacherAnnouncement = () => {
                           : "No file available"
                       }
                       onClick={() => handleFileDownload(file)}
-                      className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                      className={`${
+                        theme === "dark"
+                          ? "dark:hover:bg-slate-800 dark:border-slate-700"
+                          : "hover:bg-gray-200"
+                      } cursor-pointer dynamic-file-name border p-4 rounded  truncate whitespace-nowrap overflow-hidden`}
                     >
                       {`${originalName}.${extension}`}
                     </p>

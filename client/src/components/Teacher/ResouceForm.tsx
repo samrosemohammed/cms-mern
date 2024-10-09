@@ -4,12 +4,14 @@ import { Upload, Link2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 interface ResourceFormProps {
   data?: any;
 }
 export const ResourceForm = ({ data }: ResourceFormProps) => {
   // const { id } = useParams();
+  const { theme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [links, setLinks] = useState<string[]>([]);
@@ -223,7 +225,9 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
             <input
               id="module-file-title"
               name="module-file-title"
-              className="outline-none w-full bg-transparent border border-slate-700 p-4"
+              className={`${
+                theme === "dark" ? "dark:border-slate-700" : "border-slate-300"
+              } outline-none w-full bg-transparent border p-4 rounded`}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -236,7 +240,9 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
             <textarea
               id="module-file-description"
               name="module-file-description"
-              className="w-full bg-transparent border border-slate-700 p-4 h-[10vw] resize-none outline-none"
+              className={`${
+                theme === "dark" ? "dark:border-slate-700" : "border-slate-300"
+              } w-full bg-transparent border  p-4 h-[10vw] resize-none outline-none rounded`}
               value={description}
               placeholder="Optional"
               onChange={(e) => setDescription(e.target.value)}
@@ -259,7 +265,11 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
               return (
                 <div
                   key={index}
-                  className="file-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:border-slate-700"
+                      : "border-slate-300"
+                  } file-item flex justify-between items-center border  p-2 rounded`}
                 >
                   <div>{displayName}</div>
                   <X
@@ -277,7 +287,11 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
             {links.map((link, index) => (
               <div
                 key={index}
-                className="link-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "dark:border-slate-700 "
+                    : "border-slate-300"
+                } link-item flex justify-between items-center border p-2 rounded`}
               >
                 <div>
                   <p>Link</p>
@@ -292,7 +306,11 @@ export const ResourceForm = ({ data }: ResourceFormProps) => {
             ))}
           </div>
 
-          <div className="attach-resource border border-slate-700 p-4 rounded">
+          <div
+            className={`${
+              theme === "dark" ? "dark:border-slate-700 " : "border-slate-300"
+            } attach-resource border p-4 rounded`}
+          >
             <h3 className="text-[18px] mb-4">Attach</h3>
             <div className="flex justify-center items-center h-full">
               <div className="flex gap-6">

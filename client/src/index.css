@@ -10,12 +10,23 @@
 }
 
 body {
-  background-color: #0f1729;
-  color: #fff;
+  /* background-color: #0f1729; */
+  /* color: #fff; */
   line-height: 1.6;
   font-weight: 400;
   font-family: "Poppins", sans-serif;
 }
+
+body.light {
+  background-color: #f7f7f7;
+  color: rgb(75 85 99);
+}
+
+body.dark {
+  background-color: #0f1729;
+  color: #fff;
+}
+
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 10px; /* Width of the vertical scrollbar */

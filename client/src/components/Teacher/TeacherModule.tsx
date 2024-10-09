@@ -3,8 +3,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const TeacherModule = () => {
+  const { theme } = useTheme();
   const [modules, setModules] = useState<any>([]);
   const navigate = useNavigate();
   console.log("token : ", Cookies.get("token"));
@@ -44,7 +46,11 @@ export const TeacherModule = () => {
           {modules.map((module: any) => (
             <div
               key={module._id}
-              className="bg-slate-800 rounded cursor-pointer"
+              className={` ${
+                theme === "dark"
+                  ? "dark:bg-slate-800 dark:text-slate-300"
+                  : "bg-gray-200 text-gray-500 shadow-lg"
+              } rounded cursor-pointer`}
               onClick={() =>
                 handleModuleClick(module.moduleCode._id, module.assignGroup)
               }
@@ -54,16 +60,14 @@ export const TeacherModule = () => {
                 src={moduleBanner}
                 alt="Module Banner Image"
               />
-              <div className="space-y-3 p-4 text-slate-300">
+              <div className="space-y-3 p-4">
                 <div className="flex justify-between items-center relative">
                   <h2 className="text-[20px]">
                     {module.moduleCode.moduleName}
                   </h2>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="module-code text-[16px] text-slate-300">
-                    {module.moduleID}
-                  </p>
+                  <p className="module-code text-[16px]">{module.moduleID}</p>
                   <p>{module.assignGroup}</p>
                 </div>
                 <div className="flex justify-between items-center text-[14px] text-slate-400">
