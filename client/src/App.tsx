@@ -28,6 +28,7 @@ import { SubmitAssignmentForm } from "./components/Student/SubmitAssignmentForm"
 import { Settings } from "./components/Teacher/Settings";
 import { StudentSettings } from "./components/Student/StudentSettings";
 import { ThemeProvider } from "./utlis/ThemeContext";
+import { AdminSettings } from "./components/AdminSettings";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: "logout",
         element: <LogOutPopUp />,
+      },
+      {
+        path: "settings",
+        element: <AdminSettings />,
       },
     ],
   },

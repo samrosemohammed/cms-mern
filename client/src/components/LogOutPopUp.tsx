@@ -1,7 +1,9 @@
 import { X } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useTheme } from "../utlis/ThemeContext";
 export const LogOutPopUp = () => {
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const handleCancel = () => {
@@ -28,19 +30,35 @@ export const LogOutPopUp = () => {
   };
   return (
     <>
-      <div className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center z-50">
+      <div
+        className={`${
+          theme === "dark" ? "bg-slate-900 " : "bg-[#00000055]"
+        } fixed inset-0 bg-opacity-80 flex items-center justify-center z-50`}
+      >
         <section
-          className={`max-w-[850px] bg-slate-800 p-2 rounded-lg relative`}
+          className={`${
+            theme === "dark" ? "bg-slate-800" : "bg-white"
+          } max-w-[850px] p-2 rounded-lg relative`}
         >
           <form className={`p-2 space-y-4`} action="">
             <div className="flex items-center justify-between">
               <div></div>
               <button type="button" onClick={handleCancel}>
-                <X className="hover:bg-slate-700 text-slate-300" size={28} />
+                <X
+                  className={`${
+                    theme === "dark"
+                      ? "dark:hover:bg-slate-700 dark:text-slate-300"
+                      : "hover:bg-gray-100 text-gray-500"
+                  } size={28}`}
+                />
               </button>
             </div>
             <div className="text-[18px]">
-              <p className="text-slate-300">
+              <p
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                } `}
+              >
                 Are you sure you want to log out ?
               </p>
             </div>
@@ -49,13 +67,21 @@ export const LogOutPopUp = () => {
               <div></div>
               <div className="space-x-1.5">
                 <button
-                  className="text-[16px] cursor-pointer rounded px-2 py-0.5 text-slate-300 hover:bg-slate-700"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:text-slate-300 dark:hover:bg-slate-700"
+                      : "hover:bg-gray-100"
+                  } text-[16px] cursor-pointer rounded px-2 py-0.5 `}
                   onClick={handleCancel}
                 >
                   Cancel
                 </button>
                 <button
-                  className="text-[16px] cursor-pointer rounded px-2 py-0.5 text-red-400  hover:bg-slate-700"
+                  className={`${
+                    theme === "dark"
+                      ? "  dark:hover:bg-slate-700"
+                      : "hover:bg-red-100"
+                  } text-[16px] text-red-400 cursor-pointer rounded px-2 py-0.5 `}
                   onClick={handleLogout}
                 >
                   Log out

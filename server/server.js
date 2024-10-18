@@ -8,6 +8,7 @@ import studentRoutes from "./routes/student.js";
 import cookieParser from "cookie-parser";
 import teacherRoutes from "./routes/teacher.js";
 import moduleRoutes from "./routes/module.js";
+import adminRoutes from "./routes/admin.js";
 import assignModuleRoutes from "./routes/assignModule.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -65,5 +66,6 @@ app.use("/api", assignmentRoutes);
 app.use("/api", announcementRoutes);
 app.use("/api", userStudentRoutes);
 app.use("/api", submitAssignmentRoutes);
+app.use("/api", adminRoutes);
 
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

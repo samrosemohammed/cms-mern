@@ -2,6 +2,7 @@ import { SystemForm } from "./SystemForm";
 import { Loader } from "./Loader";
 import { useState } from "react";
 import axios from "axios";
+import { useTheme } from "../utlis/ThemeContext";
 
 interface OptionBoxProps {
   type: string[];
@@ -19,6 +20,7 @@ export const OptionBox = ({
   fetchModules, // Destructure fetchModules prop
 }: OptionBoxProps) => {
   // console.log(moduleData);
+  const { theme } = useTheme();
   const editFields = [
     {
       label: "Enter Module Name",
@@ -136,7 +138,11 @@ export const OptionBox = ({
   return (
     <>
       {isLoading && <Loader />} {/* Show loader when loading */}
-      <div className="bg-slate-700 rounded absolute right-5 bottom-[28px] z-[999]">
+      <div
+        className={`${
+          theme === "dark" ? "dark:bg-slate-700" : "bg-gray-50 text-gray-500"
+        }  rounded absolute right-5 bottom-[28px] z-[999]`}
+      >
         {isFormVisible && (
           <SystemForm
             fields={formFields}
@@ -151,12 +157,16 @@ export const OptionBox = ({
             serverMessageFromForm={setServerMessage}
           />
         )}
-        <ul className="">
+        <ul className="shadow-md">
           {type.map((eachType) => (
             <li
               key={eachType} // Add key for list items
               onClick={() => handleOptionClick(eachType)}
-              className="text-[14px] cursor-pointer px-4 py-1.5 hover:bg-slate-900"
+              className={`${
+                theme === "dark"
+                  ? "dark:hover:bg-slate-900"
+                  : "hover:bg-gray-200"
+              } text-[14px] cursor-pointer px-4 py-1.5`}
             >
               {eachType}
             </li>

@@ -87,7 +87,7 @@ export const SubmitWork = () => {
                   className={`${
                     theme === "dark"
                       ? "dark:bg-gray-800 dark:border-gray-700"
-                      : "bg-white  shadow-lg"
+                      : "bg-gray-50  shadow-lg"
                   } submit-parent border-b`}
                 >
                   <th

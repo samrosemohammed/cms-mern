@@ -38,7 +38,7 @@ body.dark {
   border-radius: 5px;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb.dark {
   background-color: #4a5568; /* Color of the scrollbar thumb */
   border-radius: 10px;
   border: 3px solid #2d3748; /* Space around the thumb */

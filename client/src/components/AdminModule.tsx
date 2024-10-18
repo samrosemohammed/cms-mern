@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 import { FeedBack } from "./FeedBack";
+import { useTheme } from "../utlis/ThemeContext";
 
 export const AdminModule = () => {
   const moduleFields = [
@@ -44,6 +45,7 @@ export const AdminModule = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [serverMessage, setSeverMessage] = useState("");
   const typeFields = ["Edit", "Assign", "Delete"];
+  const { theme } = useTheme();
 
   console.log("Server Message Recieved : ", serverMessage);
   const handleCreateModule = () => {
@@ -120,13 +122,24 @@ export const AdminModule = () => {
         </div>
         <div className="module-div grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {modules.map((modulee: any) => (
-            <div key={modulee._id} className="bg-slate-800 rounded">
+            <div
+              key={modulee._id}
+              className={` ${
+                theme === "dark"
+                  ? "dark:bg-slate-800 dark:text-slate-300"
+                  : " text-gray-500 shadow-lg"
+              } rounded cursor-pointer`}
+            >
               <img
                 className="rounded-t"
                 src={moduleBanner}
                 alt="Module Banner Image"
               />
-              <div className="space-y-3 p-4 text-slate-300">
+              <div
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                } space-y-3 p-4`}
+              >
                 <div className="flex justify-between items-center relative">
                   {selectedModuleID === modulee._id && (
                     <OptionBox
@@ -149,10 +162,18 @@ export const AdminModule = () => {
                         modulee.moduleEndDate
                       )
                     }
-                    className="cursor-pointer hover:bg-slate-700 rounded-full"
+                    className={`${
+                      theme === "dark"
+                        ? "dark:hover:bg-slate-700"
+                        : "hover:bg-gray-200 text-gray-500"
+                    } cursor-pointer rounded-full`}
                   />
                 </div>
-                <p className="module-code text-[16px] text-slate-300">
+                <p
+                  className={`${
+                    theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                  } module-code text-[16px`}
+                >
                   {modulee.moduleID}
                 </p>
                 <div className="flex justify-between items-center text-[14px] text-slate-400">

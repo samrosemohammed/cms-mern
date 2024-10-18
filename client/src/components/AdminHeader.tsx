@@ -1,6 +1,5 @@
 import { Bell, Menu, Moon, Sun } from "lucide-react";
 import defaultImg from "../assets/default-image.png";
-import { useState } from "react";
 import { useTheme } from "../utlis/ThemeContext";
 
 interface AdminHeaderProps {
@@ -29,7 +28,7 @@ export const AdminHeader = ({ handleMenu }: AdminHeaderProps) => {
         <div
           className={`${
             theme === "dark" ? "text-white" : "text-gray-500"
-          } flex items-center gap-4 cursor-pointer`}
+          } flex items-center gap-6 cursor-pointer`}
         >
           <Bell />
           {theme === "dark" ? (

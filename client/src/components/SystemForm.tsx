@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FeedBack } from "./FeedBack";
 import { Loader } from "./Loader";
+import { useTheme } from "../utlis/ThemeContext";
+
 interface FormField {
   label: string;
   type: string;
@@ -42,6 +44,7 @@ export const SystemForm = ({
   serverMessageFromForm,
   fetchData,
 }: SystemFormProps) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
   const [teachers, setTeachers] = useState<any>([]);
@@ -285,12 +288,21 @@ export const SystemForm = ({
   const formContent = fields.map((field, index) => {
     return (
       <div key={index}>
-        <label className="inline-block mb-2" htmlFor={field.id}>
+        <label
+          className={`${
+            theme === "dark" ? "" : "text-gray-600"
+          } inline-block mb-2`}
+          htmlFor={field.id}
+        >
           {field.label}
         </label>
         {field.type === "select" ? (
           <select
-            className="text-slate-300 w-full rounded px-2 py-1 mb-2 bg-slate-700 cursor-pointer"
+            className={`${
+              theme === "dark"
+                ? "dark:bg-slate-700 dark:text-slate-300"
+                : "bg-gray-200 text-gray-500 outline-none"
+            }  w-full rounded px-2 py-1 mb-2 cursor-pointer`}
             name={field.name}
             id={field.id}
             onChange={handleChange}
@@ -333,7 +345,11 @@ export const SystemForm = ({
         ) : (
           <>
             <input
-              className="w-full rounded px-2 py-1 mb-2 bg-slate-700"
+              className={`${
+                theme === "dark"
+                  ? "dark:bg-slate-700"
+                  : "bg-gray-200 text-gray-600"
+              } w-full rounded px-2 py-1 mb-2 outline-none`}
               type={field.type}
               name={field.name}
               id={field.id}
@@ -341,7 +357,13 @@ export const SystemForm = ({
               {...(field.type !== "file" && { value: formData[field.name] })}
             />
             {field.type === "file" && formData[field.name] && (
-              <p className="text-sm text-gray-300">{formData[field.name]}</p>
+              <p
+                className={`${
+                  theme === "dark" ? "dark:text-gray-300" : "text-gray-500"
+                } text-sm `}
+              >
+                {formData[field.name]}
+              </p>
             )}
           </>
         )}
@@ -356,27 +378,42 @@ export const SystemForm = ({
       {serverMessage && (
         <FeedBack key={serverMessage} message={serverMessage} />
       )}
-      <div className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center z-[998]">
+      <div
+        className={`${
+          theme === "dark" ? "bg-slate-900" : "bg-[#00000055]"
+        } fixed inset-0  bg-opacity-80 flex items-center justify-center z-[998]`}
+      >
         <section
-          className={`${
-            useGrid ? "max-w-[850px]" : "max-w-[400px]"
-          } bg-slate-800 p-4 rounded relative`}
+          className={`${useGrid ? "max-w-[850px]" : "max-w-[400px]"} ${
+            theme === "dark" ? "dark:bg-slate-800" : "bg-white shadow-lg"
+          }  p-4 rounded relative`}
         >
           <form
-            className={`bg-slate-800 p-4 space-y-3 `}
+            className={`${
+              theme === "dark" ? "dark:bg-slate-800" : "bg-white"
+            } p-4 space-y-3 `}
             action=""
             onSubmit={handleSubmit}
           >
             <div className="flex items-center justify-between">
               <div></div>
               <button type="button" onClick={onClose}>
-                <X size={28} />
+                <X
+                  className={`${
+                    theme === "dark" ? "" : "hover:bg-gray-200 text-gray-500"
+                  }`}
+                  size={28}
+                />
               </button>
             </div>
             <div className={gridClass}>{formContent}</div>
             <div></div>
             <input
-              className="cursor-pointer w-full rounded px-2 py-1 bg-green-700 hover:bg-green-800"
+              className={`${
+                theme === "dark"
+                  ? "dark:bg-green-700 dark:hover:bg-green-800"
+                  : "bg-green-200 text-green-900 hover:bg-green-300"
+              } cursor-pointer w-full rounded px-2 py-1`}
               type="submit"
             />
           </form>

@@ -144,6 +144,8 @@ export const SideBar = ({
       navigate("/teacher-dashboard/settings");
     } else if (location.pathname.includes("student-dashboard")) {
       navigate("/student-dashboard/settings");
+    } else if (location.pathname.includes("admin-dashboard")) {
+      navigate("/admin-dashboard/settings");
     }
   };
 
@@ -306,7 +308,7 @@ export const SideBar = ({
       <aside
         className={`w-[50vw] md:w-[20vw] h-screen fixed z-[997] transition-transform ${
           isSidebarVisible ? "translate-x-0" : "-translate-x-full"
-        } ${theme === "dark" ? "dark:bg-slate-800" : "shadow-md"}`}
+        } ${theme === "dark" ? "dark:bg-slate-800" : "shadow-md bg-gray-50"}`}
       >
         <header
           className={`${
@@ -349,7 +351,11 @@ export const SideBar = ({
 
           <ul className="nav-ul text-slate-300 space-y-2">{navItems}</ul>
 
-          <footer className="absolute bottom-0 text-slate-400 text-[10px] p-2">
+          <footer
+            className={`${
+              theme === "dark" ? "dark:text-slate-400 " : "text-gray-500"
+            } absolute bottom-0 text-[10px] p-2`}
+          >
             <p>
               Copyright &copy; {year} by myClassroom. Alright rights reversed.
             </p>

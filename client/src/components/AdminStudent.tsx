@@ -8,8 +8,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Loader } from "./Loader";
+import { useTheme } from "../utlis/ThemeContext";
 
 export const AdminStudent = () => {
+  const { theme } = useTheme();
   const studentFields = [
     {
       label: "Student Name",
@@ -196,8 +198,18 @@ export const AdminStudent = () => {
           </div>
         </div>
         <div className="max-w-screen-xl  overflow-x-auto shadow-md sm:rounded">
-          <table className="w-full text-xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-[12px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table
+            className={`${
+              theme === "dark" ? "dark:text-gray-400" : "text-gray-500"
+            } w-full text-xl text-left rtl:text-right`}
+          >
+            <thead
+              className={`${
+                theme === "dark"
+                  ? "dark:bg-gray-700 dark:text-gray-400"
+                  : "border-b text-gray-600"
+              } text-[12px]  uppercase  `}
+            >
               <tr>
                 <th scope="" className="px-6 py-1">
                   Student ID
@@ -239,11 +251,17 @@ export const AdminStudent = () => {
               {filteredStudents.map((student: any) => (
                 <tr
                   key={student._id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-gray-800 dark:border-gray-700"
+                      : "border-b"
+                  }`}
                 >
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className={`${
+                      theme === "dark" ? "dark:text-white" : "text-gray-900"
+                    } px-6 py-4 font-medium  whitespace-nowrap `}
                   >
                     {student.studentID}
                   </th>
@@ -254,7 +272,9 @@ export const AdminStudent = () => {
                   <td className="px-6 py-4">{student.studentMobileNo}</td>
                   <td className="px-6 py-4 ">
                     <img
-                      className="object-cover w-[48px] h-[48px] rounded-full bg-slate-700 p-1"
+                      className={`${
+                        theme === "dark" ? "bg-slate-700" : "bg-gray-300"
+                      } object-cover w-[48px] h-[48px] rounded-full p-1`}
                       src={
                         student?.studentImage
                           ? `http://localhost:5000/uploads/${student.studentImage}`

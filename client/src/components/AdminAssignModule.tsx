@@ -5,7 +5,10 @@ import { FeedBack } from "./FeedBack";
 import { Loader } from "./Loader";
 import axios from "axios";
 import moment from "moment";
+import { useTheme } from "../utlis/ThemeContext";
+
 export const AdminAssignModule = () => {
+  const { theme } = useTheme();
   const [assignModule, setAssignModule] = useState<any>([]);
   const [clickedAssignModule, setClickAssignModule] = useState<any>({});
   const [isFormVisible, setFormVisible] = useState(false);
@@ -132,8 +135,18 @@ export const AdminAssignModule = () => {
           </div>
         </div>
         <div className=" max-w-screen-xl overflow-auto max-h-[580px] overflow-y-auto shadow-md sm:rounded">
-          <table className="w-full text-xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="sticky top-0 z-10 text-[12px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table
+            className={`${
+              theme === "dark" ? "dark:text-gray-400" : "text-gray-500"
+            } w-full text-xl text-left rtl:text-right`}
+          >
+            <thead
+              className={`${
+                theme === "dark"
+                  ? "dark:text-gray-400 dark:bg-gray-600"
+                  : "bg-white border-b text-gray-700"
+              } sticky top-0 z-10 text-[12px] uppercase`}
+            >
               <tr>
                 <th scope="" className="px-6 py-1">
                   Module Code
@@ -160,11 +173,17 @@ export const AdminAssignModule = () => {
                 return (
                   <tr
                     key={assignModule._id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    className={`${
+                      theme === "dark"
+                        ? "dark:bg-gray-800 dark:border-gray-700"
+                        : "bg-white"
+                    } border-b`}
                   >
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className={`${
+                        theme === "dark" ? "dark:text-white" : "text-gray-900"
+                      } px-6 py-4 font-medium  whitespace-nowrap `}
                     >
                       {assignModule.moduleCode.moduleID}
                     </th>
