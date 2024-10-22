@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import moduleBanner from "../../assets/module-banner.jpg";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../Loader";
+import { useTheme } from "../../utlis/ThemeContext";
 export const Module = () => {
+  const { theme } = useTheme();
   const [modules, setModules] = useState<any>([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +54,11 @@ export const Module = () => {
           {modules.map((module: any) => (
             <div
               key={module._id.moduleCode}
-              className="bg-slate-800 rounded cursor-pointer"
+              className={`${
+                theme === "dark"
+                  ? "bg-slate-800 dark:text-slate-300"
+                  : "text-gray-500 shadow-lg"
+              } rounded cursor-pointer`}
               onClick={() =>
                 handleModuleClick(
                   module.moduleDetails._id,
@@ -61,18 +67,18 @@ export const Module = () => {
               }
             >
               <img
-                className="rounded-t"
+                className="rounded-t "
                 src={moduleBanner}
                 alt="Module Banner Image"
               />
-              <div className="space-y-3 p-4 text-slate-300">
+              <div className="space-y-3 p-4">
                 <div className="flex justify-between items-center relative">
                   <h2 className="text-[20px]">
                     {module.moduleDetails.moduleName}
                   </h2>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="module-code text-[16px] text-slate-300">
+                  <p className="module-code text-[16px]">
                     {module.moduleDetails.moduleID}
                   </p>
                   <p>{module._id.assignGroup}</p>

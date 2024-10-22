@@ -3,8 +3,10 @@ import { Pencil, X, EyeOff, Eye } from "lucide-react";
 import defaultImage from "../../assets/default-image.png";
 import axios from "axios";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const StudentSettings = () => {
+  const { theme } = useTheme();
   const [userDetails, setUserDetails] = useState<any>();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isRemoveProfileVisible, setRemoveProfileVisible] =
@@ -223,22 +225,40 @@ export const StudentSettings = () => {
         <div className="flex gap-8">
           <form action="" className="settings-form flex-1 space-y-6">
             <div className="space-y-2">
-              <label htmlFor="full-name" className="text-slate-300">
+              <label
+                htmlFor="full-name"
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                }`}
+              >
                 Full Name
               </label>
               <input
-                className="w-full rounded px-4 py-3 mb-2 bg-slate-800 text-slate-400"
+                className={`${
+                  theme === "dark"
+                    ? "dark:bg-slate-800 dark:text-slate-400"
+                    : "bg-gray-200 text-gray-500"
+                } w-full rounded px-4 py-3 mb-2 outline-none`}
                 type="text"
                 placeholder={userDetails && userDetails.studentName}
                 onChange={(e) => setFullName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="full-name" className="text-slate-300">
+              <label
+                htmlFor="full-name"
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                }`}
+              >
                 Email
               </label>
               <input
-                className="w-full rounded px-4 py-3 mb-2 bg-slate-800 text-slate-400"
+                className={`${
+                  theme === "dark"
+                    ? "dark:bg-slate-800 dark:text-slate-400"
+                    : "bg-gray-200 text-gray-500"
+                } w-full rounded px-4 py-3 mb-2 `}
                 type="text"
                 placeholder={userDetails && userDetails.studentEmail}
                 disabled
@@ -254,17 +274,30 @@ export const StudentSettings = () => {
               </p>
             </div>
             <div className="space-y-2">
-              <label htmlFor="full-name" className="text-slate-300">
+              <label
+                htmlFor="full-name"
+                className={`${
+                  theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+                }`}
+              >
                 Phone No
               </label>
               <input
-                className="w-full rounded px-4 py-3 mb-2 bg-slate-800 text-slate-400"
+                className={`${
+                  theme === "dark"
+                    ? "dark:bg-slate-800 dark:text-slate-400"
+                    : "bg-gray-200 text-gray-500"
+                } w-full rounded px-4 py-3 mb-2 `}
                 type="text"
                 placeholder={userDetails && userDetails.studentMobileNo}
                 onChange={(e) => setMobileNumber(e.target.value)}
               />
             </div>
-            <p className="text-slate-400">
+            <p
+              className={`${
+                theme === "dark" ? "dark:text-slate-300" : "text-gray-500"
+              }`}
+            >
               Want to change your password{" "}
               <span
                 onClick={handleChangePassword}
@@ -277,11 +310,18 @@ export const StudentSettings = () => {
           <div className="for-image-content">
             <div className="relative ">
               <div
-                className="bg-slate-700 rounded-full p-2 absolute -right-2 -top-1 cursor-pointer"
+                className={`${
+                  theme === "dark" ? "dark:bg-slate-700" : "bg-gray-300"
+                } rounded-full p-2 absolute -right-2 -top-1 cursor-pointer`}
                 title="Edit Image"
                 onClick={handleEditImageClick}
               >
-                <Pencil size={18} className="text-slate-300" />
+                <Pencil
+                  size={18}
+                  className={`${
+                    theme === "dark" ? "dark:text-slate-300" : "text-slate-500"
+                  } `}
+                />
               </div>
               <div className="group">
                 <img
@@ -290,9 +330,11 @@ export const StudentSettings = () => {
                   alt="User"
                 />
                 <button
-                  className="text-[14px] text-slate-300 absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
-               bg-red-800 py-1 px-3 rounded-full opacity-0 
-               group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-red-800 dark:text-slate-300"
+                      : "bg-red-100 text-red-600"
+                  } text-[14px] absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full py-1 px-3 rounded-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300`}
                   onClick={handleRemoveImage}
                 >
                   Remove
@@ -312,28 +354,48 @@ export const StudentSettings = () => {
         </div>
         <button
           onClick={handleSaveChanges}
-          className="mt-6 bg-green-800 px-2 py-0.5 rounded text-slate-300"
+          className={`${
+            theme === "dark"
+              ? "dark:bg-green-800 dark:text-slate-300"
+              : "bg-green-200 text-green-900 shadow-md"
+          } mt-6  px-2 py-0.5 rounded`}
         >
           Save Changes
         </button>
       </section>
 
       {isChangeEmailFormVisible && (
-        <section className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center text-slate-300">
+        <section
+          className={`${
+            theme === "dark"
+              ? "bg-slate-900 dark:text-slate-300"
+              : "bg-[#00000055] text-gray-600"
+          } fixed inset-0  z-[999] bg-opacity-80 flex items-center justify-center rounded`}
+        >
           <form
             action=""
             // onSubmit={handleSubmitEmailChange}
-            className="space-y-4 bg-slate-800 p-4 max-w-screen-sm for-change-email rounded"
+            className={`${
+              theme === "dark" ? "dark:bg-slate-800" : "bg-gray-100"
+            } space-y-4 max-w-screen-sm for-change-email rounded p-8`}
           >
             <div className="flex items-center justify-between">
               <h3 className="text-[18px]">Change Email Address</h3>
               <X
-                className="hover:bg-slate-700 cursor-pointer rounded"
+                className={`${
+                  theme === "dark"
+                    ? "dark:hover:bg-slate-700"
+                    : "hover:bg-gray-200"
+                } cursor-pointer rounded`}
                 size={28}
                 onClick={handleCancelEmailChange}
               />
             </div>
-            <p className="text-[14px] text-slate-400">
+            <p
+              className={`${
+                theme === "dark" ? "dark:text-slate-400" : "text-gray-500"
+              } text-[14px] `}
+            >
               You are going to update your primary email address with the new
               one.
             </p>
@@ -342,7 +404,11 @@ export const StudentSettings = () => {
                 New Email Address
               </label>
               <input
-                className="w-full rounded px-2 py-1  bg-slate-700"
+                className={`${
+                  theme === "dark"
+                    ? "dark:bg-slate-700"
+                    : "bg-gray-200 outline-none py-2"
+                } w-full rounded px-2 py-1`}
                 type="text"
                 placeholder="Email Address"
                 onChange={(e) => setEmail(e.target.value)}
@@ -352,19 +418,27 @@ export const StudentSettings = () => {
               <label htmlFor="">Enter Current Password</label>
               <div className="relative">
                 <input
-                  className="w-full rounded px-2 py-1  bg-slate-700"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-slate-700"
+                      : "bg-gray-200 outline-none py-2"
+                  } w-full rounded px-2 py-1`}
                   type={isPasswordVisible ? "text" : "password"}
                   placeholder="Current Password"
                   onChange={(e) => setCurrentPasswordForEmail(e.target.value)}
                 />
                 {isPasswordVisible ? (
                   <EyeOff
-                    className="absolute right-2 top-1 cursor-pointer"
+                    className={`${
+                      theme === "dark" ? "" : "text-gray-500 top-2"
+                    } absolute right-2 top-1 cursor-pointer`}
                     onClick={togglePasswordVisibility}
                   />
                 ) : (
                   <Eye
-                    className="absolute right-2 top-1 cursor-pointer"
+                    className={`${
+                      theme === "dark" ? "" : "text-gray-500 top-2"
+                    } absolute right-2 top-1 cursor-pointer`}
                     onClick={togglePasswordVisibility}
                   />
                 )}
@@ -376,14 +450,22 @@ export const StudentSettings = () => {
               <div className="space-x-4">
                 <button
                   onClick={handleCancelEmailChange}
-                  className="border-2 border-slate-600 px-4 py-0.5 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:border-slate-600"
+                      : "border-gray-300"
+                  } border-2  px-4 py-0.5 rounded`}
                 >
                   Cancel
                 </button>
                 <input
                   onClick={handleSubmitEmailChange}
                   type="submit"
-                  className="bg-green-800 px-4 py-0.5 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-green-800"
+                      : "bg-green-200 text-green-800"
+                  } border-2 border-transparent px-4 py-0.5 rounded`}
                 />
               </div>
             </div>
@@ -392,24 +474,36 @@ export const StudentSettings = () => {
       )}
 
       {isChangePasswordFormVisible && (
-        <section className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center text-slate-300">
+        <section
+          className={`${
+            theme === "dark" ? "bg-slate-900" : "bg-[#00000055]"
+          } fixed inset-0 bg-opacity-80 flex items-center justify-center text-slate-300 z-[999]`}
+        >
           <form
             action=""
-            className="for-password-change max-w-screen-sm bg-slate-800 p-4 rounded space-y-4"
+            className={`${
+              theme === "dark" ? "dark:bg-slate-800" : "bg-white text-gray-600"
+            } for-password-change max-w-screen-sm p-4 rounded space-y-4`}
           >
             <div className="flex items-center justify-between">
               <div></div>
               <X
                 onClick={handleClosePasswordChange}
                 size={28}
-                className="hover:bg-slate-700 cursor-pointer rounded"
+                className={`${
+                  theme === "dark"
+                    ? "dark:hover:bg-slate-700"
+                    : "hover:bg-gray-100"
+                } cursor-pointer rounded`}
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="">Password</label>
               <input
-                className="w-full rounded px-2 py-1  bg-slate-700"
+                className={`${
+                  theme === "dark" ? "dark:bg-slate-700" : "bg-gray-100 py-2"
+                } w-full rounded px-2 py-1 outline-none`}
                 type="text"
                 placeholder="Current Password"
                 onChange={(e) => setCurrentPasswordForPassword(e.target.value)}
@@ -418,7 +512,9 @@ export const StudentSettings = () => {
             <div className="space-y-2">
               <label htmlFor="">Enter New Password</label>
               <input
-                className="w-full rounded px-2 py-1  bg-slate-700"
+                className={`${
+                  theme === "dark" ? "dark:bg-slate-700" : "bg-gray-100 py-2"
+                } w-full rounded px-2 py-1 outline-none`}
                 type="text"
                 placeholder="New Password"
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -427,7 +523,9 @@ export const StudentSettings = () => {
             <div className="space-y-2">
               <label htmlFor="">Confirm Password</label>
               <input
-                className="w-full rounded px-2 py-1  bg-slate-700"
+                className={`${
+                  theme === "dark" ? "dark:bg-slate-700" : "bg-gray-100 py-2"
+                } w-full rounded px-2 py-1 outline-none`}
                 type="text"
                 placeholder="Re-Enter Password"
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -438,7 +536,11 @@ export const StudentSettings = () => {
               <div className="space-x-4">
                 <button
                   onClick={handlePasswordChange}
-                  className="bg-green-800 px-4 py-0.5 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-green-800"
+                      : "bg-green-200 text-green-800"
+                  }  px-4 py-0.5 rounded`}
                 >
                   Submit
                 </button>
@@ -449,15 +551,27 @@ export const StudentSettings = () => {
       )}
 
       {isRemoveProfileVisible && (
-        <section className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center text-slate-300">
+        <section
+          className={`${
+            theme === "dark"
+              ? "bg-slate-900 dark:text-slate-300"
+              : "bg-[#00000055] text-gray-500"
+          } z-[999] fixed inset-0 bg-opacity-80 flex items-center justify-center`}
+        >
           <form
-            className="max-w-screen-sm bg-slate-800 p-4 rounded space-y-6"
+            className={`${
+              theme === "dark" ? "dark:bg-slate-800" : "bg-white"
+            } max-w-screen-sm p-4 rounded space-y-6`}
             action=""
           >
             <div className="flex items-center justify-between">
               <h3 className="text-[18px]">Remove Profile Image ?</h3>
               <X
-                className="hover:bg-slate-700 cursor-pointer rounded"
+                className={`${
+                  theme == "dark"
+                    ? "dark:hover:bg-slate-700"
+                    : "hover:bg-gray-100"
+                } cursor-pointer rounded`}
                 size={28}
                 onClick={handleCancelRemoveProfie}
               />
@@ -468,13 +582,21 @@ export const StudentSettings = () => {
               <div className="space-x-4">
                 <button
                   onClick={handleCancelRemoveProfie}
-                  className="border-2 border-slate-600 px-4 py-0.5 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:border-slate-600"
+                      : "border-slate-300 hover:bg-gray-100"
+                  } border-2 px-4 py-0.5 rounded`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleBackendRemoveImage}
-                  className="bg-red-800 px-4 py-0.5 rounded"
+                  className={`${
+                    theme === "dark"
+                      ? "dark:bg-red-800"
+                      : "bg-red-100 text-red-600 hover:bg-red-200"
+                  }  border-2 border-transparent px-4 py-0.5 rounded`}
                 >
                   Remove
                 </button>

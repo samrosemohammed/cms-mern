@@ -58,7 +58,7 @@ export const NavBar = () => {
                 smooth={true}
                 duration={500}
               >
-                Home
+                Homee
               </ScrollLink>
             </li>
             <li className="nav-item">

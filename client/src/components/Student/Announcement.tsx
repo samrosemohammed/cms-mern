@@ -1,7 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Bookmark, Minus } from "lucide-react";
+import { useTheme } from "../../utlis/ThemeContext";
+import moment from "moment";
 export const Announcement = () => {
+  const { theme } = useTheme();
+  const currentYear = new Date().getFullYear();
   const [announcements, setAnnouncements] = useState<any>([]);
   useEffect(() => {
     const fetchModuleAnnouncement = async () => {
@@ -58,7 +62,9 @@ export const Announcement = () => {
         <ol className="space-y-8">
           {announcements.map((announcement: any) => (
             <li
-              className="border-b border-slate-600 p-4 rounded"
+              className={`${
+                theme === "dark" ? "border-slate-600" : "border-gray-300"
+              } border-b p-4 rounded`}
               key={announcement._id}
             >
               <div className="flex justify-between mb-6">
@@ -69,7 +75,16 @@ export const Announcement = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 relative">
-                  <p>{new Date(announcement.createdAt).toLocaleTimeString()}</p>
+                  <p className="text-[14px]">
+                    Posted
+                    <span className="ml-2">
+                      {moment(announcement.createdAt).year() === currentYear
+                        ? moment(announcement.createdAt).format(
+                            "MMM D, hh:mm A"
+                          )
+                        : moment(announcement.createdAt).format("YYYY, MMM D")}
+                    </span>
+                  </p>
                   {/* <EllipsisVertical
                     onClick={() => handleOption(announcement._id)}
                     className="cursor-pointer hover:bg-slate-800 rounded-full"
@@ -116,7 +131,11 @@ export const Announcement = () => {
                           : "No file available"
                       }
                       onClick={() => handleFileDownload(file)}
-                      className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                      className={`${
+                        theme === "dark"
+                          ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                          : "border-slate-300 hover:bg-gray-200"
+                      } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                     >
                       {`${originalName}.${extension}`}
                     </p>
@@ -130,7 +149,11 @@ export const Announcement = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={link}
-                    className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                    className={`${
+                      theme === "dark"
+                        ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                        : "border-slate-300 hover:bg-gray-200"
+                    } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                   >
                     {link}
                   </a>
@@ -139,7 +162,11 @@ export const Announcement = () => {
 
               <div className="mt-3 text-slate-400 text-[14px] flex justify-between items-center">
                 <div></div>
-                <p className="dynamic-author-name flex gap-2 items-center">
+                <p
+                  className={`${
+                    theme === "dark" ? "text-inherit" : "text-gray-500"
+                  } dynamic-author-name flex gap-2 items-center`}
+                >
                   <Minus size={18} /> {announcement.teacherId.teacherName}
                 </p>
               </div>

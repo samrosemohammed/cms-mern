@@ -306,7 +306,7 @@ export const SideBar = ({
         />
       )}
       <aside
-        className={`w-[50vw] md:w-[20vw] h-screen fixed z-[997] transition-transform ${
+        className={`w-[50vw] md:w-[20vw] h-screen fixed z-[998] transition-transform ${
           isSidebarVisible ? "translate-x-0" : "-translate-x-full"
         } ${theme === "dark" ? "dark:bg-slate-800" : "shadow-md bg-gray-50"}`}
       >

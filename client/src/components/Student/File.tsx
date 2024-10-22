@@ -1,8 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
+import moment from "moment";
+import { useTheme } from "../../utlis/ThemeContext";
 export const File = () => {
   const [resources, setResources] = useState<any>([]);
+  const { theme } = useTheme();
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const fetchModuleResources = async () => {
@@ -63,7 +67,9 @@ export const File = () => {
             {resources.map((resource: any) => (
               <li
                 key={resource._id}
-                className="border-b border-slate-600 p-4 rounded"
+                className={`${
+                  theme === "dark" ? "dark:border-slate-600" : "border-gray-300"
+                } border-b p-4 rounded`}
               >
                 <div className="flex justify-between mb-6">
                   <div className="flex items-center gap-2">
@@ -71,7 +77,14 @@ export const File = () => {
                     <p className="dynamic-week-header">{resource.title}</p>
                   </div>
                   <div className="flex items-center gap-2 relative">
-                    <p>{new Date(resource.createdAt).toLocaleTimeString()}</p>
+                    <p className="text-[14px]">
+                      Posted
+                      <span className="ml-2">
+                        {moment(resource.createdAt).year() === currentYear
+                          ? moment(resource.createdAt).format("MMM D, hh:mm A")
+                          : moment(resource.createdAt).format("YYYY, MMM D")}
+                      </span>
+                    </p>
                   </div>
                 </div>
                 <div className="">
@@ -94,7 +107,11 @@ export const File = () => {
                               : "No file available"
                           }
                           onClick={() => handleFileDownload(file)}
-                          className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                          className={`${
+                            theme === "dark"
+                              ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                              : "border-slate-300 hover:bg-gray-200"
+                          } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                         >
                           {`${originalName}.${extension}`}
                         </p>
@@ -108,7 +125,11 @@ export const File = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={link}
-                        className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                        className={`${
+                          theme === "dark"
+                            ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                            : "border-slate-300 hover:bg-gray-200"
+                        } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                       >
                         {link}
                       </a>

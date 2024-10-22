@@ -4,8 +4,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 
 export const Assignment = () => {
+  const { theme } = useTheme();
   const [assignments, setAssignments] = useState<any>([]);
   const [submittedAssignment, setSubmittedAssignment] = useState<any>([]);
   const navigate = useNavigate();
@@ -123,14 +125,20 @@ export const Assignment = () => {
             {assignments.map((assignment: any) => (
               <li
                 key={assignment._id}
-                className="border-b border-slate-600 p-4 rounded"
+                className={`${
+                  theme === "dark" ? "dark:border-slate-600" : "border-gray-300"
+                } border-b p-4 rounded`}
               >
                 <div className="flex justify-between mb-6">
                   <div className="flex items-center gap-2">
                     <NotepadText />
                     <p className="dynamic-week-header">{assignment.title}</p>
                   </div>
-                  <div className="text-slate-400 text-[14px]">
+                  <div
+                    className={`${
+                      theme === "dark" ? "text-slate-400" : "text-inherit"
+                    } text-[14px]`}
+                  >
                     <div className="flex items-center gap-2">
                       <p>
                         Due{" "}
@@ -150,7 +158,11 @@ export const Assignment = () => {
                                 (submitted: any) =>
                                   submitted.assignmentId === assignment._id
                               )?.status === "Late Submit"
-                            ? "bg-red-900 text-slate-300"
+                            ? `${
+                                theme === "dark"
+                                  ? "bg-red-900 text-slate-300"
+                                  : "bg-red-200 text-red-600"
+                              }`
                             : ""
                         }`}
                       >
@@ -199,7 +211,11 @@ export const Assignment = () => {
                               : "No file available"
                           }
                           onClick={() => handleFileDownload(file)}
-                          className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                          className={`${
+                            theme === "dark"
+                              ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                              : "border-slate-300 hover:bg-gray-200"
+                          } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                         >
                           {`${originalName}.${extension}`}
                         </p>
@@ -213,7 +229,11 @@ export const Assignment = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={link}
-                        className="cursor-pointer dynamic-file-name border border-slate-700 p-4 rounded hover:bg-slate-800 truncate whitespace-nowrap overflow-hidden"
+                        className={`${
+                          theme === "dark"
+                            ? "dark:border-slate-700 dark:hover:bg-slate-800"
+                            : "border-slate-300 hover:bg-gray-200"
+                        } cursor-pointer dynamic-file-name border p-4 rounded truncate whitespace-nowrap overflow-hidden`}
                       >
                         {link}
                       </a>
@@ -231,13 +251,21 @@ export const Assignment = () => {
                       <>
                         <button
                           onClick={() => handleUnsubmit(assignment._id)}
-                          className="text-red-400 px-1.5 py-0.5 rounded border border-transparent hover:bg-red-800 hover:text-white"
+                          className={`${
+                            theme === "dark"
+                              ? "hover:bg-red-800 hover:text-white  text-red-400"
+                              : "hover:bg-red-200 text-red-600"
+                          } px-1.5 py-0.5 rounded border border-transparent`}
                         >
                           Unsubmit
                         </button>
                         <button
                           onClick={() => handleResubmit(assignment._id)}
-                          className="text-blue-400 px-1.5 py-0.5 border border-transparent rounded hover:bg-blue-800 hover:text-white"
+                          className={`${
+                            theme === "dark"
+                              ? " hover:bg-blue-800 hover:text-white text-blue-400 "
+                              : "text-blue-600 hover:bg-blue-200"
+                          } px-1.5 py-0.5 border border-transparent rounded`}
                         >
                           Re-submit
                         </button>
@@ -245,7 +273,11 @@ export const Assignment = () => {
                     ) : (
                       <button
                         onClick={() => handleSubmitAssignment(assignment._id)}
-                        className="bg-blue-800 px-1.5 py-0.5 rounded"
+                        className={`${
+                          theme === "dark"
+                            ? "bg-blue-800"
+                            : "bg-blue-200 text-blue-600"
+                        }  px-1.5 py-0.5 rounded`}
                       >
                         Submit Assignment
                       </button>

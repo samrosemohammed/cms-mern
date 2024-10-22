@@ -4,7 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FeedBack } from "../FeedBack";
+import { useTheme } from "../../utlis/ThemeContext";
 export const SubmitAssignmentForm = () => {
+  const { theme } = useTheme();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [submittedAssignment, setSubmittedAssignment] = useState<any>([]);
   const [links, setLinks] = useState<string[]>([]);
@@ -191,7 +193,9 @@ export const SubmitAssignmentForm = () => {
             {selectedFiles.map((file, index) => (
               <div
                 key={index}
-                className="file-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                className={`${
+                  theme === "dark" ? "border-slate-700" : "border-gray-300"
+                } file-item flex justify-between items-center border p-2 rounded`}
               >
                 <div>{file.name}</div>
                 <X
@@ -208,7 +212,9 @@ export const SubmitAssignmentForm = () => {
             {links.map((link, index) => (
               <div
                 key={index}
-                className="link-item flex justify-between items-center border border-slate-700 p-2 rounded"
+                className={`${
+                  theme === "dark" ? " border-slate-700" : "border-gray-300"
+                } link-item flex justify-between items-center border p-2 rounded`}
               >
                 <div>
                   <p>Link</p>
@@ -223,7 +229,11 @@ export const SubmitAssignmentForm = () => {
             ))}
           </div>
 
-          <div className="attach-resource border border-slate-700 p-4 rounded">
+          <div
+            className={`${
+              theme === "dark" ? "border-slate-700" : "border-gray-300"
+            } attach-resource border p-4 rounded`}
+          >
             <h3 className="text-[18px] mb-4">Attach</h3>
             <div className="flex justify-center items-center h-full">
               <div className="flex gap-6">
@@ -264,18 +274,26 @@ export const SubmitAssignmentForm = () => {
 
       {/* Link Form Pop-Up */}
       {isLinkFormOpen && (
-        <section className="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center">
+        <section
+          className={`${
+            theme === "dark" ? " bg-slate-900" : "bg-[#00000055]"
+          } fixed bg-opacity-80 inset-0 flex items-center justify-center`}
+        >
           <form
             action=""
             onSubmit={handleLinkSubmit}
-            className="bg-slate-800 p-4 forLink max-w-[400px] rounded space-y-4"
+            className={`${
+              theme === "dark" ? " bg-slate-800" : "shadow-md bg-white"
+            } p-4 forLink max-w-[400px] rounded space-y-4`}
           >
             <div className="flex items-center justify-between">
               <h3>Add Link</h3>
               <X className="cursor-pointer" onClick={handleLinkClose} />
             </div>
             <input
-              className="outline-none w-full bg-transparent border-b border-slate-700 p-2"
+              className={`${
+                theme === "dark" ? "border-slate-700" : "border-gray-300"
+              } outline-none w-full bg-transparent border-b p-2`}
               placeholder="Link"
               type="url"
               value={newLink}
@@ -284,7 +302,11 @@ export const SubmitAssignmentForm = () => {
             <input
               type="submit"
               onClick={handleLinkSubmit}
-              className="bg-green-800 px-1.5 py-1 w-full rounded"
+              className={`${
+                theme === "dark"
+                  ? "bg-green-800"
+                  : "bg-green-200 text-green-700"
+              } px-1.5 py-1 w-full rounded`}
             />
           </form>
         </section>

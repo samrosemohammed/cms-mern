@@ -10,6 +10,7 @@ const loginUser = async (req, res) => {
   try {
     // Check if the user is an admin
     let user = await User.findOne({ email });
+    console.log("admin user = ", user);
     if (user) {
       const isMatch = user.email === email;
       if (!isMatch) {

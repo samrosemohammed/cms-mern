@@ -568,7 +568,7 @@ export const Settings = () => {
             theme === "dark"
               ? "bg-slate-900 dark:text-slate-300"
               : "bg-[#00000055] text-gray-500"
-          } fixed inset-0 bg-opacity-80 flex items-center justify-center `}
+          } z-[999] fixed inset-0 bg-opacity-80 flex items-center justify-center`}
         >
           <form
             className={`${

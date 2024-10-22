@@ -6,7 +6,7 @@ export const Loader = () => {
       <div
         className={`${
           theme === "dark" ? "bg-slate-900" : "bg-[#00000055]"
-        } fixed inset-0 bg-opacity-80 flex items-center justify-center z-[999]`}
+        } z-[999] fixed inset-0 bg-opacity-80 flex items-center justify-center`}
       >
         <div
           className={`${
