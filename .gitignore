@@ -1,3 +1,4 @@
+# to ignore the node_modules folder and dist folder
 uploads
 dist
 node_modules
