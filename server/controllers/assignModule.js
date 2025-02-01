@@ -12,7 +12,6 @@ export const createModuleAssign = async (req, res) => {
     } = req.body;
 
     console.log("Received data:", req.body);
-    // Check for existing assignment with the same teacher, group, and module
     const existingAssignment = await ModuleAssign.findOne({
       teacherName,
       assignGroup,
@@ -35,7 +34,7 @@ export const createModuleAssign = async (req, res) => {
       moduleName,
       moduleCode,
       teacherId,
-      dateAssigned: new Date(), // Set the date when the module is assigned
+      dateAssigned: new Date(),
       createdBy: req.user._id,
     });
 
