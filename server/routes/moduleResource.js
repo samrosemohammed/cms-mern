@@ -11,7 +11,6 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
-
 router.post(
   "/teacher-dashboard/module/file/upload",
   authMiddleware,

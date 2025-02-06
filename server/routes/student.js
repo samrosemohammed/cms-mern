@@ -54,5 +54,4 @@ router.delete(
   authMiddleware,
   removeImage
 );
-
 export default router;

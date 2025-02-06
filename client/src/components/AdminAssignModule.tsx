@@ -6,6 +6,7 @@ import { Loader } from "./Loader";
 import axios from "axios";
 import moment from "moment";
 import { useTheme } from "../utlis/ThemeContext";
+import ViewGroupStudent from "./ViewGroupStudent";
 
 export const AdminAssignModule = () => {
   const { theme } = useTheme();
@@ -15,6 +16,9 @@ export const AdminAssignModule = () => {
   const [serverMessage, setSeverMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isViewGroupStudentVisible, setViewGroupStudentVisible] =
+    useState(false);
+  const [group, setGroup] = useState("");
 
   const option = "Assign";
   const assignFields = [
@@ -111,6 +115,12 @@ export const AdminAssignModule = () => {
     return moment(dateString).format("YYYY-MM-DD HH:mm:ss");
   };
 
+  const handleViewGroupStudent = (group: string) => {
+    console.log("View Group Student button clicked", group);
+    setViewGroupStudentVisible(true);
+    setGroup(group);
+  };
+
   return (
     <>
       <section>
@@ -126,6 +136,12 @@ export const AdminAssignModule = () => {
             option={option}
             fetchData={fetchAssignModules}
             serverMessageFromForm={setSeverMessage}
+          />
+        )}
+        {isViewGroupStudentVisible && (
+          <ViewGroupStudent
+            group={group}
+            onClose={() => setViewGroupStudentVisible(false)}
           />
         )}
         <div className="flex items-center justify-between mb-4">
@@ -161,6 +177,9 @@ export const AdminAssignModule = () => {
                   Group Name
                 </th>
                 <th scope="" className="px-6 py-1">
+                  Student
+                </th>
+                <th scope="" className="px-6 py-1">
                   Assign Date
                 </th>
                 <th scope="" className="px-6 py-1">
@@ -194,6 +213,14 @@ export const AdminAssignModule = () => {
                       {assignModule.teacherId?.teacherName}
                     </td>
                     <td className="px-6 py-4">{assignModule.assignGroup}</td>
+                    <td
+                      onClick={() =>
+                        handleViewGroupStudent(assignModule.assignGroup)
+                      }
+                      className="px-6 py-4 text-blue-400 underline underline-offset-2 cursor-pointer"
+                    >
+                      View
+                    </td>
                     <td className="px-6 py-4">
                       {formatDate(assignModule.dateAssigned)}
                     </td>

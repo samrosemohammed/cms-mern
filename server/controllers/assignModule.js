@@ -1,4 +1,5 @@
 import ModuleAssign from "../models/ModuleAssign.js";
+import student from "../models/Student.js";
 
 export const createModuleAssign = async (req, res) => {
   try {
@@ -107,4 +108,16 @@ export const deleteModuleAssign = async (req, res) => {
   await ModuleAssign.findByIdAndDelete(id);
 
   res.json({ message: "Module Assign deleted successfully." });
+};
+
+export const getStudentByGroup = async (req, res) => {
+  const { group } = req.params;
+  if (!group) {
+    return res.json({ message: "Unauthenticated" });
+  }
+  const students = await student.find({ studentGroup: group });
+  if (!students) {
+    return res.json({ message: "No students found in this group" });
+  }
+  res.json(students);
 };

@@ -4,6 +4,7 @@ import {
   getModuleAssign,
   deleteModuleAssign,
   editModuleAssign,
+  getStudentByGroup,
 } from "../controllers/assignModule.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 
@@ -27,4 +28,5 @@ router.delete(
   deleteModuleAssign
 );
 
+router.get("/admin-dashboard/assign/:group", authMiddleware, getStudentByGroup);
 export default router;
